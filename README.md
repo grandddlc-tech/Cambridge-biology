@@ -18,6 +18,14 @@ It is plain HTML, CSS and JS with no build step. It works offline and can be ins
 - For a new chapter, create `data/chNN.js` setting `window.BIO_DATA.chapters[NN] = {...}` and add a `<script>` tag in `index.html`.
 - New drawings go in `js/figures.js`. Bump `VERSION` in `sw.js` after changes.
 
+## Android app (APK)
+Every push builds an APK with GitHub Actions (`.github/workflows/android.yml`) and publishes it as a release.
+Latest download: https://github.com/grandddlc-tech/Cambridge-biology/releases/latest/download/CambridgeBio.apk
+
+The APK is a native WebView wrapper (`android/`) around the same web files, so content updates flow into it automatically.
+The signing key is not stored in the repo. Optionally add repository secrets `KEYSTORE_BASE64`, `KEYSTORE_PASSWORD` (and `KEY_ALIAS`)
+for a permanent key; otherwise a key is generated once and kept in the Actions cache.
+
 ## Run
 Open `index.html`, or serve the folder (`python3 -m http.server`). To host it, enable **GitHub Pages** (Settings → Pages → deploy from branch).
 Progress is stored in the browser (localStorage). Use *Progress → Backup* to move it to another device.

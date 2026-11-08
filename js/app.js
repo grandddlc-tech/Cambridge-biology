@@ -567,8 +567,10 @@
         <div class="row"><button class="btn sm" id="exp">⬇ Export</button><label class="btn sm">⬆ Import<input type="file" id="imp" accept="application/json" hidden></label><span class="spacer"></span><button class="btn sm danger" id="rst">Reset all</button></div>
       </div>`;
     $("#exp", el).onclick = () => {
+      const name = `bioglow-progress-${new Date().toISOString().slice(0, 10)}.json`;
+      if (window.AndroidBridge) return window.AndroidBridge.saveFile(name, JSON.stringify(S, null, 2));
       const blob = new Blob([JSON.stringify(S, null, 2)], { type: "application/json" });
-      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `bioglow-progress-${new Date().toISOString().slice(0, 10)}.json`; a.click();
+      const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = name; a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 2000);
     };
     $("#imp", el).onchange = (e) => {
