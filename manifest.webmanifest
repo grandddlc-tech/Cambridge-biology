@@ -1,0 +1,10 @@
+{
+  "name": "BioGlow IMAT — Cambridge Biology",
+  "short_name": "BioGlow",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#060914",
+  "theme_color": "#060914",
+  "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }]
+}
