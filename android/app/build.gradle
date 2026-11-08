@@ -3,37 +3,37 @@ plugins { id 'com.android.application' }
 def runNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
 
 android {
-    namespace 'com.bioglow.imat'
-    compileSdk 34
+    namespace = 'com.bioglow.imat'
+    compileSdk = 34
 
     defaultConfig {
-        applicationId "com.bioglow.imat"
-        minSdk 26
-        targetSdk 34
-        versionCode runNumber
-        versionName "1.0.${runNumber}"
+        applicationId = "com.bioglow.imat"
+        minSdk = 26
+        targetSdk = 34
+        versionCode = runNumber
+        versionName = "1.0.${runNumber}"
     }
 
     // Signing key comes from the CI environment (never committed). A stable key
     // means each new APK installs as an update and keeps saved progress.
     signingConfigs {
         release {
-            storeFile file(System.getenv("KEYSTORE_FILE") ?: "release.keystore")
-            storePassword System.getenv("KEYSTORE_PASSWORD")
-            keyAlias System.getenv("KEY_ALIAS")
-            keyPassword System.getenv("KEYSTORE_PASSWORD")
+            storeFile = file(System.getenv("KEYSTORE_FILE") ?: "release.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEYSTORE_PASSWORD")
         }
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            signingConfig signingConfigs.release
+            minifyEnabled = false
+            signingConfig = signingConfigs.release
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

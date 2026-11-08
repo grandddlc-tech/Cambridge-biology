@@ -1,4 +1,9 @@
-pluginManagement { repositories { google(); mavenCentral(); gradlePluginPortal() } }
+pluginManagement {
+  repositories { google(); mavenCentral(); gradlePluginPortal() }
+  // AGP version can be overridden with -PagpVersion=... (CI falls back to a newer AGP
+  // when it has to use the runner's preinstalled Gradle 9).
+  plugins { id 'com.android.application' version "${agpVersion}" }
+}
 dependencyResolutionManagement {
   repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
   repositories { google(); mavenCentral() }
