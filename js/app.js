@@ -40,6 +40,34 @@
   const qById = (ch, id) => D.chapters[ch].questions.find((q) => q.id === id);
   function toast(msg) { const el = $("#toast"); el.textContent = msg; el.classList.add("show"); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove("show"), 2200); }
 
+  // Short, gentle answer feedback. Generated locally so no audio files or network are needed.
+  let answerAudioContext = null;
+  function playAnswerSound(correct) {
+    try {
+      const AudioCtx = window.AudioContext || window.webkitAudioContext;
+      if (!AudioCtx) return;
+      answerAudioContext = answerAudioContext || new AudioCtx();
+      if (answerAudioContext.state === "suspended") answerAudioContext.resume();
+      const ctx = answerAudioContext;
+      const now = ctx.currentTime;
+      const notes = correct ? [660, 880] : [260, 190];
+      notes.forEach((frequency, index) => {
+        const start = now + index * 0.105;
+        const oscillator = ctx.createOscillator();
+        const gain = ctx.createGain();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(frequency, start);
+        gain.gain.setValueAtTime(0.0001, start);
+        gain.gain.exponentialRampToValueAtTime(0.12, start + 0.018);
+        gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.14);
+        oscillator.connect(gain);
+        gain.connect(ctx.destination);
+        oscillator.start(start);
+        oscillator.stop(start + 0.15);
+      });
+    } catch (e) { /* Audio is optional; never interrupt answering if unavailable. */ }
+  }
+
   const ring = (p, size = 54, stroke = 6, label = `${p}%`) => {
     const r = (size - stroke) / 2, c = 2 * Math.PI * r;
     return `<div class="ring" style="width:${size}px;height:${size}px"><svg viewBox="0 0 ${size} ${size}" style="width:${size}px;height:${size}px"><circle class="bgc" cx="${size / 2}" cy="${size / 2}" r="${r}" style="stroke-width:${stroke}"/><circle class="fg" cx="${size / 2}" cy="${size / 2}" r="${r}" style="stroke-width:${stroke}" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}"/></svg><div class="lab">${label}</div></div>`;
@@ -332,8 +360,14 @@
     const cur = $(".qdot.cur", el); if (cur) cur.scrollIntoView({ block: "nearest", inline: "center" });
 
     function choose(oi) {
-      if (practice) { if (locked) return; T.ans[i] = oi; T.locked[i] = true; }
-      else T.ans[i] = T.ans[i] === oi ? null : oi;
+      if (practice) {
+        if (locked) return;
+        T.ans[i] = oi;
+        T.locked[i] = true;
+        playAnswerSound(oi === q.a);
+      } else {
+        T.ans[i] = T.ans[i] === oi ? null : oi;
+      }
       runTest(el);
     }
     function confirmFinish() {
