@@ -87,8 +87,12 @@ public class MainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
-        if (web.canGoBack()) web.goBack();
-        else super.onBackPressed();
+        // Let the page handle Back first (window.appBack returns true when it did).
+        web.evaluateJavascript("(window.appBack && window.appBack()) ? '1' : '0'", v -> {
+            if ("\"1\"".equals(v)) return;
+            if (web.canGoBack()) web.goBack();
+            else MainActivity.super.onBackPressed();
+        });
     }
 
     /** Called from JS to save the progress backup (blob downloads don't work in WebView). */

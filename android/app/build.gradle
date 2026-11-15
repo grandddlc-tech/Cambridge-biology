@@ -1,13 +1,16 @@
 plugins { id 'com.android.application' }
 
 def runNumber = (System.getenv("GITHUB_RUN_NUMBER") ?: "1").toInteger()
+// -PappVariant=neon builds the NeonBio app (separate app id, installs alongside BioGlow)
+def neon = (project.findProperty("appVariant") ?: "") == "neon"
 
 android {
     namespace = 'com.bioglow.imat'
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.bioglow.imat"
+        applicationId = neon ? "com.neonbio.imat" : "com.bioglow.imat"
+        manifestPlaceholders = [appLabel: neon ? "NeonBio IMAT" : "BioGlow IMAT"]
         minSdk = 26
         targetSdk = 34
         versionCode = runNumber

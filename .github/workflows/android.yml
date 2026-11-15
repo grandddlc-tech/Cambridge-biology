@@ -95,10 +95,26 @@ jobs:
       - name: Rename APK
         run: cp android/app/build/outputs/apk/release/app-release.apk CambridgeBio.apk
 
+      # Second app: NeonBio (neon/index.html), its own app id so both can be installed.
+      - name: Copy NeonBio into the APK assets
+        run: |
+          W=android/app/src/main/assets/www
+          rm -rf "$W" && mkdir -p "$W"
+          cp neon/index.html "$W"/index.html
+
+      - name: Build NeonBio APK
+        working-directory: android
+        run: gradle assembleRelease --no-daemon $AGP_ARGS -PappVariant=neon
+
+      - name: Rename NeonBio APK
+        run: cp android/app/build/outputs/apk/release/app-release.apk NeonBio.apk
+
       - uses: actions/upload-artifact@v4
         with:
           name: CambridgeBio-apk
-          path: CambridgeBio.apk
+          path: |
+            CambridgeBio.apk
+            NeonBio.apk
 
       - name: Publish GitHub release
         uses: softprops/action-gh-release@v2
@@ -107,7 +123,10 @@ jobs:
           name: BioGlow IMAT v1.0.${{ github.run_number }}
           target_commitish: ${{ github.sha }}
           make_latest: "true"
-          files: CambridgeBio.apk
+          files: |
+            CambridgeBio.apk
+            NeonBio.apk
           body: |
+            NeonBio.apk = NeonBio IMAT (new app). CambridgeBio.apk = BioGlow IMAT.
             Android build of BioGlow IMAT (Cambridge Biology for IMAT).
             Download CambridgeBio.apk below and open it on your phone to install.

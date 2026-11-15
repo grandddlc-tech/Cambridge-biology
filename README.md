@@ -18,6 +18,10 @@ It is plain HTML, CSS and JS with no build step. It works offline and can be ins
 - For a new chapter, create `data/chNN.js` setting `window.BIO_DATA.chapters[NN] = {...}` and add a `<script>` tag in `index.html`.
 - New drawings go in `js/figures.js`. Bump `VERSION` in `sw.js` after changes.
 
+## NeonBio IMAT (new app, `neon/`)
+A separate single-file app with only Chapter 2, pages 2.1–2.2 and Fig 2.2: review, flashcards, 20 IMAT-style questions, figures, mistakes and progress.
+APK: https://github.com/grandddlc-tech/Cambridge-biology/releases/latest/download/NeonBio.apk (installs next to BioGlow as its own app).
+
 ## Android app (APK)
 Every push builds an APK with GitHub Actions (`.github/workflows/android.yml`) and publishes it as a release.
 Latest download: https://github.com/grandddlc-tech/Cambridge-biology/releases/latest/download/CambridgeBio.apk

@@ -852,6 +852,14 @@ function vProgress(C, el) {
   };
 }
 
+/* Android Back button: returns true when the app handled it */
+window.appBack = () => {
+  if (T && !T.done) { toast("Tap End to finish the test"); return true; }
+  if (T && T.done) { T = null; render(); return true; }
+  if (ui.ch && ui.tab !== "review") { ui.tab = "review"; render(); return true; }
+  if (ui.ch) { ui.ch = null; render(); return true; }
+  return false;
+};
 $("#home").onclick = () => { if (T && !T.done) return toast("Finish or end the test first"); T = null; ui.ch = null; render(); };
 render();
 </script>
