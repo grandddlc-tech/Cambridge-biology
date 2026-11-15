@@ -16,6 +16,7 @@ window.BIO_DATA.chapters[2] = {
   accent: "#3ee6d0",
 
   topics: {
+    bb: "2.1–2.2 Biochemistry & building blocks",
     basics: "Building blocks & polymers",
     mono: "Monosaccharides",
     ring: "Ring structures & isomers",
@@ -60,7 +61,9 @@ window.BIO_DATA.chapters[2] = {
 <p><b class="kw">Biochemistry</b> studies the chemical reactions of biological molecules.</p>
 <p><b class="kw">Metabolism</b> = the <b>sum total of all biochemical reactions</b> in the body.</p>
 <p>Underlying simplicity: only <b>20 common amino acids</b> are used to make proteins, although millions are theoretically possible. A <b>limited variety of molecules</b> makes metabolism <b>easier to control</b>.</p>
-<p>Key theme of the chapter: a close link between the <b>structure</b> of a molecule and its <b>function</b>.</p>`
+<p>Key theme of the chapter: a close link between the <b>structure</b> of a molecule and its <b>function</b>.</p>
+<div class="tip"><b>IMAT logic:</b> fewer kinds of building blocks → fewer enzymes and pathways needed → metabolism is <b>easier to control</b>. If a question imagines 200 amino acids instead of 20, the answer is "metabolism harder to control".</div>
+<div class="warn"><b>Trap:</b> metabolism is <b>all</b> biochemical reactions (building up <i>and</i> breaking down), not only respiration or only digestion.</div>`
     },
     {
       id: "s3",
@@ -79,7 +82,10 @@ window.BIO_DATA.chapters[2] = {
 <tr><td>organic bases (+ sugar + phosphate) → nucleotides</td><td>nucleic acids</td></tr>
 <tr><td>amino acids</td><td>proteins</td></tr>
 <tr><td>fatty acids + glycerol</td><td>lipids</td></tr>
-</table>`
+</table>
+<div class="tip"><b>Read Fig 2.2 carefully:</b> monosaccharides feed <b>two</b> arrows (→ polysaccharides, and → nucleotides). Nucleotides are the only box that is <b>both</b> made from simple molecules <b>and</b> a building block itself.</div>
+<div class="warn"><b>Traps:</b> by number of <b>atoms</b> H is most abundant (by <b>mass</b> it would be O). Organic bases are part of nucleotides, not monomers. Lipids come from fatty acids + glycerol but are <b>not polymers</b>.</div>
+<p>Of the four main elements, <b>nitrogen</b> marks proteins (amino acids) and nucleic acids (organic bases); simple carbohydrates and fats contain only C, H and O.</p>`
     },
     {
       id: "s4",
@@ -235,7 +241,135 @@ window.BIO_DATA.chapters[2] = {
      `fixed: true` keeps the option order (for statement-combination items). */
   questions: [
     {
-      id: "c2q1", topic: "basics",
+      id: "c2b1", topic: "bb",
+      q: "Which of the following is the best definition of metabolism?",
+      o: ["All the reactions that break large molecules into smaller ones", "All the enzyme-controlled reactions of respiration", "The sum total of all the biochemical reactions in the body", "The chemical reactions involved in digesting food", "The study of the chemical reactions of biological molecules"],
+      a: 2,
+      e: "Metabolism is the sum total of all the biochemical reactions in the body (both building up and breaking down). 'The study of the chemical reactions of biological molecules' is the definition of biochemistry, not metabolism.",
+      tip: "Biochemistry = the STUDY. Metabolism = ALL the reactions."
+    },
+    {
+      id: "c2b2", topic: "bb",
+      q: "Consider the following statements:\n1. Hydrogen, carbon, oxygen and nitrogen make up more than 99% of the atoms in living things.\n2. Oxygen is the most abundant atom in living organisms.\n3. Carbon atoms can join together to form long chains or rings.\nWhich of the statements is/are correct?",
+      o: ["1 only", "2 only", "1 and 3 only", "2 and 3 only", "1, 2 and 3"],
+      a: 2, fixed: true,
+      e: "1 is correct (> 99% of atoms). 2 is wrong: by number of atoms hydrogen is the most abundant (order H > C > O > N). 3 is correct: carbon chains and rings are the skeletons of organic molecules.",
+      tip: "Atom count: H first. Carbon = chains & rings."
+    },
+    {
+      id: "c2b3", topic: "bb",
+      q: "According to Figure 2.2 (the building blocks of life), monosaccharides contribute to the formation of which complex biological molecules?",
+      o: ["Polysaccharides only", "Polysaccharides and nucleic acids", "Polysaccharides and lipids", "Nucleic acids and proteins", "Polysaccharides, nucleic acids and lipids"],
+      a: 1,
+      e: "Monosaccharides join to form polysaccharides, and a monosaccharide (a pentose sugar) also combines with an organic base to form nucleotides, which form nucleic acids. That is the curved arrow in Fig 2.2.",
+      tip: "Monosaccharides have TWO arrows in Fig 2.2."
+    },
+    {
+      id: "c2b4", topic: "bb",
+      q: "In Figure 2.2, which molecule is made from other simple biological molecules and is itself a building block for a complex molecule?",
+      o: ["Organic base", "Glycerol", "Nucleotide", "Amino acid", "Lipid"],
+      a: 2,
+      e: "Nucleotides are formed from organic bases and monosaccharides (with phosphate), and nucleotides then join to form nucleic acids. Organic bases, glycerol and amino acids are starting building blocks; a lipid is a complex end product.",
+      tip: "Nucleotide = the 'middle' box of Fig 2.2."
+    },
+    {
+      id: "c2b5", topic: "bb",
+      q: "Which pairing of a simple biological molecule with the complex molecule it builds is correct?",
+      o: ["Fatty acids → polysaccharides", "Organic bases → proteins", "Amino acids → proteins", "Glycerol → nucleic acids", "Monosaccharides → lipids"],
+      a: 2,
+      e: "Amino acids → proteins. The other correct pairings are monosaccharides → polysaccharides, organic bases (+ sugar) → nucleotides → nucleic acids, and fatty acids + glycerol → lipids.",
+      tip: "Sugar→polysaccharide, base→nucleotide→nucleic acid, amino acid→protein, FA+glycerol→lipid."
+    },
+    {
+      id: "c2b6", topic: "bb",
+      q: "Which of the following is classified in Figure 2.2 as a complex biological molecule?",
+      o: ["Glycerol", "Nucleotide", "Amino acid", "Lipid", "Organic base"],
+      a: 3,
+      e: "The complex molecules in Fig 2.2 are polysaccharides, nucleic acids, proteins and lipids. Glycerol, nucleotides, amino acids and organic bases are simple biological molecules (building blocks).",
+      tip: "Complex = polysaccharides, nucleic acids, proteins, lipids."
+    },
+    {
+      id: "c2b7", topic: "bb",
+      q: "A complex biological molecule from Figure 2.2 is completely hydrolysed. The products include organic bases. The molecule was most likely:",
+      o: ["a polysaccharide", "a protein", "a lipid", "a nucleic acid", "glycogen"],
+      a: 3,
+      e: "Organic bases are part of nucleotides, and nucleotides are the subunits of nucleic acids. Hydrolysis of a polysaccharide (e.g. glycogen) gives monosaccharides, of a protein amino acids, and of a lipid fatty acids and glycerol.",
+      tip: "Organic bases come only from nucleotides / nucleic acids."
+    },
+    {
+      id: "c2b8", topic: "bb",
+      q: "Of the four most common elements in living organisms, which one is found in both proteins and nucleic acids but NOT in simple carbohydrates such as glucose?",
+      o: ["Carbon", "Hydrogen", "Oxygen", "Nitrogen", "Sulfur"],
+      a: 3,
+      e: "Carbohydrates contain only C, H and O. Amino acids contain an amine group (N) and nucleotides contain nitrogenous organic bases, so N is in both proteins and nucleic acids. Sulfur is not one of the four most common elements and is not in nucleic acids.",
+      tip: "Carbohydrates = CHO only. N → proteins & nucleic acids."
+    },
+    {
+      id: "c2b9", topic: "bb",
+      q: "Imagine a hypothetical organism that built its proteins from 200 different amino acids instead of 20. Based on the coursebook's reasoning, what would be the most likely consequence?",
+      o: ["Its proteins could no longer be hydrolysed", "Its metabolism would be harder to control", "It would need fewer enzymes", "Its proteins would not contain carbon", "It would no longer need nucleic acids"],
+      a: 1,
+      e: "The coursebook says having a limited variety of molecules makes it easier to control metabolism. More kinds of building blocks would mean more pathways and enzymes to regulate, so metabolism would be harder to control.",
+      tip: "Variety ↑ → control of metabolism ↓."
+    },
+    {
+      id: "c2b10", topic: "bb",
+      q: "In a living organism, approximately what proportion of all atoms are elements OTHER than hydrogen, carbon, oxygen and nitrogen?",
+      o: ["Less than 1%", "About 5%", "About 10%", "About 25%", "About 50%"],
+      a: 0,
+      e: "H, C, O and N account for more than 99% of atoms in living things, so all other elements (e.g. P, S, Na, K, Ca, Fe) together make up less than 1% of atoms.",
+      tip: "HCON > 99% → everything else < 1%."
+    },
+    {
+      id: "c2b11", topic: "bb",
+      q: "Consider the following statements about the origin of biological molecules:\n1. Before life evolved there was a period of chemical evolution.\n2. Simple carbon-based molecules evolved from even simpler molecules.\n3. Simple biological molecules are extremely varied, which is why there are so many proteins.\nWhich of the statements is/are correct?",
+      o: ["1 only", "1 and 2 only", "2 and 3 only", "1 and 3 only", "1, 2 and 3"],
+      a: 1, fixed: true,
+      e: "1 and 2 match the coursebook. 3 is wrong: simple biological molecules are relatively LIMITED in variety; complex molecules get their variety from how the building blocks are combined.",
+      tip: "Simple molecules = limited variety. Variety comes from combining them."
+    },
+    {
+      id: "c2b12", topic: "bb",
+      q: "Which statement best describes the role of carbon in organic molecules?",
+      o: ["Carbon atoms carry out the functions of the molecule, while other atoms form the skeleton", "Carbon atoms form chains or rings that act as a skeleton, to which other atoms with different functions are attached", "Carbon atoms only form rings, never chains", "Carbon is present only in proteins and nucleic acids", "Carbon atoms form ionic bonds that hold the molecule together"],
+      a: 1,
+      e: "Carbon chains and rings are the basic skeletons of organic molecules, and other atoms (O, H, N, …) with different functions are attached to them. Carbon is in all organic molecules and forms covalent bonds.",
+      tip: "Carbon = skeleton; other atoms = function."
+    },
+    {
+      id: "c2b13", topic: "bb",
+      q: "Which of the following arrows would be INCORRECT if added to Figure 2.2?",
+      o: ["Monosaccharides → polysaccharides", "Organic bases → nucleotides", "Nucleotides → nucleic acids", "Glycerol → polysaccharides", "Fatty acids and glycerol → lipids"],
+      a: 3,
+      e: "Glycerol combines with fatty acids to form lipids; it is not a building block of polysaccharides. Polysaccharides are built only from monosaccharides.",
+      tip: "Glycerol belongs only to the lipid column."
+    },
+    {
+      id: "c2b14", topic: "bb",
+      q: "Which statement correctly distinguishes biochemistry from metabolism?",
+      o: ["Biochemistry is the sum of all reactions in the body; metabolism is the study of those reactions", "Biochemistry looks at the chemical reactions of biological molecules; metabolism is the sum total of all biochemical reactions in the body", "Both terms mean exactly the same thing", "Biochemistry only studies proteins; metabolism only involves carbohydrates", "Metabolism takes place only outside cells; biochemistry only inside cells"],
+      a: 1,
+      e: "Biochemistry is the field that looks at the chemical reactions of biological molecules. Metabolism is the actual sum total of those reactions taking place in the body.",
+      tip: "Biochemistry = subject. Metabolism = the reactions themselves."
+    },
+    {
+      id: "c2b15", topic: "bb",
+      q: "Consider the following statements about Figure 2.2:\n1. Every complex molecule shown is made from only one type of simple molecule.\n2. Nucleic acids are made from nucleotides.\n3. Proteins are made from amino acids.\nWhich of the statements is/are correct?",
+      o: ["1 only", "2 only", "2 and 3 only", "1 and 3 only", "1, 2 and 3"],
+      a: 2, fixed: true,
+      e: "2 and 3 are correct. 1 is wrong: lipids are made from two different molecules (fatty acids and glycerol), and nucleotides themselves are made from organic bases and monosaccharides.",
+      tip: "Lipids need TWO kinds of building block: fatty acids + glycerol."
+    },
+    {
+      id: "c2b16", topic: "bb",
+      q: "The coursebook says 'only 20 common amino acids are used to make proteins'. This is given as an example of:",
+      o: ["the close link between structure and function", "the underlying simplicity of biochemistry", "chemical evolution before life", "the abundance of nitrogen in living things", "the fact that proteins are not polymers"],
+      a: 1,
+      e: "The 20 amino acids example illustrates the underlying simplicity of biochemistry: a limited variety of building blocks, which makes metabolism easier to control.",
+      tip: "20 amino acids → 'underlying simplicity'."
+    },
+    {
+      id: "c2q1", topic: "bb",
       q: "Which of the following lists the four most common elements in living organisms in decreasing order of abundance (by number of atoms)?",
       o: ["Carbon, hydrogen, oxygen, nitrogen", "Hydrogen, carbon, oxygen, nitrogen", "Oxygen, carbon, hydrogen, nitrogen", "Hydrogen, oxygen, carbon, nitrogen", "Carbon, oxygen, nitrogen, hydrogen"],
       a: 1,
@@ -492,7 +626,7 @@ window.BIO_DATA.chapters[2] = {
       tip: "Ribose → RNA + ATP; deoxyribose → DNA; glucose → starch, glycogen, cellulose."
     },
     {
-      id: "c2q33", topic: "basics",
+      id: "c2q33", topic: "bb",
       q: "Only 20 common amino acids are used to make proteins, although millions are theoretically possible. According to the coursebook, an advantage of this limited variety is that it:",
       o: ["makes proteins more soluble", "makes metabolism easier to control", "prevents hydrolysis of proteins", "removes the need for enzymes", "allows proteins to become polymers"],
       a: 1,
@@ -540,7 +674,7 @@ window.BIO_DATA.chapters[2] = {
       tip: "Count C–C + C–H, or use Σ valencies ÷ 2."
     },
     {
-      id: "c2q39", topic: "basics",
+      id: "c2q39", topic: "bb",
       q: "Why is carbon particularly important in biological molecules?",
       o: ["It is the most abundant atom in living organisms", "Carbon atoms can join together to form long chains or rings that act as molecular skeletons", "It forms only single bonds, making molecules stable", "It is the only element that forms covalent bonds", "It can form ionic bonds with hydrogen"],
       a: 1,

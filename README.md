@@ -11,7 +11,7 @@ It is plain HTML, CSS and JS with no build step. It works offline and can be ins
 - **Progress**: mastery ring, scores, chart of recent tests, accuracy by topic, history, and backup export/import.
 
 ## Content so far
-- Chapter 2, *Biological molecules*, pp. 44–50 (2.1 → 2.4, Practical Activity 2.1). 9 sections, 20 flashcards, 40 questions, 9 figures.
+- Chapter 2, *Biological molecules*, pp. 44–50 (2.1 → 2.4, Practical Activity 2.1). 9 sections, 20 flashcards, 56 questions (19 on 2.1–2.2 alone), 9 figures.
 
 ## Adding pages / chapters
 - Extend `data/ch02.js` (`sections`, `flashcards`, `questions`, `figures`).

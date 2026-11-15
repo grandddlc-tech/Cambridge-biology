@@ -272,8 +272,9 @@
             <span class="chip ${setup.mode === "practice" ? "on" : ""}" data-mode="practice">💡 Practice — instant feedback</span></div></div>
           <div class="opt-group"><label class="lbl">Timer (IMAT pace: 100 s / question)</label><div class="row">
             <span class="chip ${setup.timer ? "on" : ""}" data-t="1">⏱ On</span><span class="chip ${!setup.timer ? "on" : ""}" data-t="0">Off</span></div></div>
-          <div class="opt-group"><label class="lbl">Topics</label><div class="row">
-            ${Object.entries(C.topics).map(([k, v]) => `<span class="chip ${setup.topics.has(k) ? "on" : ""}" data-topic="${k}">${v} <span class="muted">${C.questions.filter((q) => q.topic === k).length}</span></span>`).join("")}</div></div>
+          <div class="opt-group"><label class="lbl">Topics <span class="muted small" style="text-transform:none;letter-spacing:0">· tap ◎ to test only that topic</span></label><div class="row">
+            <span class="chip ${setup.topics.size === Object.keys(C.topics).length ? "on" : ""}" data-alltopics="1">All topics</span>
+            ${Object.entries(C.topics).map(([k, v]) => `<span class="chip ${setup.topics.has(k) ? "on" : ""}" data-topic="${k}">${v} <span class="muted">${C.questions.filter((q) => q.topic === k).length}</span> <span data-only="${k}" title="Only this topic" style="padding:0 2px 0 6px;opacity:.85">◎</span></span>`).join("")}</div></div>
         </div>
         <button class="btn primary block" id="start" style="margin-top:18px" ${pool.length ? "" : "disabled"}>Start test · ${Math.min(setup.n === "all" ? pool.length : setup.n, pool.length)} questions</button>
       </div>
@@ -287,6 +288,8 @@
     el.querySelectorAll("[data-n]").forEach((c) => (c.onclick = () => { setup.n = c.dataset.n === "all" ? "all" : +c.dataset.n; viewTest(ch, el); }));
     el.querySelectorAll("[data-mode]").forEach((c) => (c.onclick = () => { setup.mode = c.dataset.mode; viewTest(ch, el); }));
     el.querySelectorAll("[data-t]").forEach((c) => (c.onclick = () => { setup.timer = c.dataset.t === "1"; viewTest(ch, el); }));
+    el.querySelectorAll("[data-only]").forEach((c) => (c.onclick = (ev) => { ev.stopPropagation(); setup.topics = new Set([c.dataset.only]); viewTest(ch, el); }));
+    el.querySelectorAll("[data-alltopics]").forEach((c) => (c.onclick = () => { setup.topics = new Set(Object.keys(C.topics)); viewTest(ch, el); }));
     el.querySelectorAll("[data-topic]").forEach((c) => (c.onclick = () => { const k = c.dataset.topic; setup.topics.has(k) ? setup.topics.delete(k) : setup.topics.add(k); viewTest(ch, el); }));
     $("#start", el).onclick = () => {
       const n = setup.n === "all" ? pool.length : Math.min(setup.n, pool.length);
