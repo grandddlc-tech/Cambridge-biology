@@ -1,0 +1,858 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"></head><body>
+<title>Neon Bio IMAT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+/* Layout: phone-first single column app, glass panels floating over a dark glowing lab background, bottom tab bar */
+:root {
+  --bg: #070a17;
+  --bg2: #0d1226;
+  --panel: rgba(22, 28, 58, .62);
+  --line: rgba(140, 160, 255, .16);
+  --fg: #e9edff;
+  --muted: #98a0c8;
+  --cyan: #35f2e0;
+  --violet: #a78bfa;
+  --pink: #ff5fd2;
+  --lime: #9dff7a;
+  --red: #ff6b8b;
+  --amber: #ffd166;
+  --font-d: "Sora", "Segoe UI", system-ui, sans-serif;
+  --font-b: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-m: "JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-b); font-size: 15.5px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 110px; overflow-x: hidden;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.glow-bg { position: fixed; inset: 0; z-index: -1; pointer-events: none; overflow: hidden; background: radial-gradient(1200px 600px at 50% -10%, #141b3d 0%, var(--bg) 60%); }
+.glow-bg i { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .45; animation: drift 18s ease-in-out infinite alternate; }
+.glow-bg i:nth-child(1) { width: 340px; height: 340px; background: var(--cyan); top: -120px; left: -100px; opacity: .22; }
+.glow-bg i:nth-child(2) { width: 300px; height: 300px; background: var(--pink); top: 40%; right: -140px; opacity: .16; animation-delay: -6s; }
+.glow-bg i:nth-child(3) { width: 280px; height: 280px; background: var(--violet); bottom: -120px; left: 20%; opacity: .2; animation-delay: -12s; }
+.glow-bg::after { content: ""; position: absolute; inset: 0; background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 44px 44px; opacity: .25; mask-image: radial-gradient(circle at 50% 20%, #000 0%, transparent 70%); }
+@keyframes drift { to { transform: translate(40px, 30px) scale(1.12); } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+
+.wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 14px; background: linear-gradient(var(--bg) 70%, transparent); }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--font-d); font-weight: 800; font-size: 19px; letter-spacing: .2px; cursor: pointer; background: none; border: 0; color: var(--fg); padding: 0; }
+.brand svg { width: 34px; height: 34px; filter: drop-shadow(0 0 8px var(--cyan)); }
+.brand b { color: var(--cyan); text-shadow: 0 0 14px rgba(53, 242, 224, .7); }
+.brand small { font-family: var(--font-m); font-size: 10.5px; padding: 2px 7px; border-radius: 6px; background: linear-gradient(90deg, var(--violet), var(--pink)); color: #12081f; letter-spacing: 1px; }
+.top-meta { font-family: var(--font-m); font-size: 12px; color: var(--muted); }
+
+h1, h2, h3, h4 { font-family: var(--font-d); text-wrap: balance; margin: 0; line-height: 1.25; }
+h1 { font-size: clamp(26px, 6vw, 36px); font-weight: 800; }
+h2 { font-size: 21px; font-weight: 700; }
+h3 { font-size: 17px; font-weight: 700; }
+h4 { font-size: 14px; font-weight: 700; color: var(--cyan); text-transform: uppercase; letter-spacing: 1.2px; margin-top: 6px; }
+p { margin: 0; }
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.mono { font-family: var(--font-m); }
+.glass { background: var(--panel); border: 1px solid var(--line); border-radius: 20px; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); padding: 18px; min-width: 0; }
+.stack { display: flex; flex-direction: column; gap: 12px; }
+.row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.between { justify-content: space-between; }
+.neon-text { background: linear-gradient(90deg, var(--cyan), var(--violet) 55%, var(--pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+.btn { font-family: var(--font-d); font-weight: 700; font-size: 14.5px; border-radius: 14px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); color: var(--fg); padding: 11px 16px; cursor: pointer; transition: transform .15s, box-shadow .2s, background .2s; }
+.btn:hover { background: rgba(255, 255, 255, .08); }
+.btn:active { transform: scale(.97); }
+.btn:focus-visible, .chip:focus-visible, .opt:focus-visible, .tab:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.btn.primary { background: linear-gradient(135deg, var(--cyan), #5aa8ff 60%, var(--violet)); color: #06101c; border: 0; box-shadow: 0 0 22px rgba(53, 242, 224, .45); }
+.btn.primary:hover { box-shadow: 0 0 32px rgba(53, 242, 224, .7); }
+.btn.block { width: 100%; }
+.btn[disabled] { opacity: .4; pointer-events: none; }
+.chip { font-family: var(--font-b); font-weight: 600; font-size: 13.5px; padding: 7px 13px; border-radius: 999px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); color: var(--muted); cursor: pointer; }
+.chip.on { color: var(--cyan); border-color: var(--cyan); background: rgba(53, 242, 224, .08); box-shadow: 0 0 14px rgba(53, 242, 224, .3); }
+.badge { font-family: var(--font-m); font-size: 11px; font-weight: 700; letter-spacing: .6px; padding: 3px 9px; border-radius: 8px; background: rgba(167, 139, 250, .14); color: var(--violet); border: 1px solid rgba(167, 139, 250, .3); }
+.badge.cy { color: var(--cyan); background: rgba(53, 242, 224, .1); border-color: rgba(53, 242, 224, .3); }
+.badge.pk { color: var(--pink); background: rgba(255, 95, 210, .1); border-color: rgba(255, 95, 210, .3); }
+.badge.ok { color: var(--lime); background: rgba(157, 255, 122, .1); border-color: rgba(157, 255, 122, .3); }
+
+/* Home */
+.hero { padding: 22px 18px; position: relative; overflow: hidden; }
+.hero p { margin-top: 8px; max-width: 52ch; }
+.ch-card { display: grid; grid-template-columns: auto 1fr auto; gap: 14px; align-items: center; cursor: pointer; transition: transform .2s, box-shadow .2s, border-color .2s; text-align: left; width: 100%; color: var(--fg); font: inherit; }
+.ch-card:hover { transform: translateY(-2px); border-color: rgba(53, 242, 224, .5); box-shadow: 0 0 26px rgba(53, 242, 224, .2); }
+.ch-num { width: 54px; height: 54px; border-radius: 16px; display: grid; place-items: center; font-family: var(--font-d); font-weight: 800; font-size: 22px; color: #06101c; background: linear-gradient(135deg, var(--cyan), var(--violet)); box-shadow: 0 0 20px rgba(53, 242, 224, .5); }
+.ch-card.locked { opacity: .45; cursor: default; }
+.ch-card.locked:hover { transform: none; box-shadow: none; border-color: var(--line); }
+.ch-card.locked .ch-num { background: rgba(255, 255, 255, .08); color: var(--muted); box-shadow: none; }
+.ring { width: 52px; height: 52px; }
+.ring circle { fill: none; stroke-width: 6; }
+
+/* Chapter header + tabs */
+.ch-head { display: flex; gap: 12px; align-items: flex-start; }
+.back { width: 40px; height: 40px; flex: none; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); color: var(--fg); cursor: pointer; font-size: 18px; }
+nav.tabs { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); display: flex; justify-content: center; }
+nav.tabs .bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 560px; padding: 6px; border-radius: 22px; background: rgba(13, 18, 38, .88); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 2px; border-radius: 16px; border: 0; background: none; color: var(--muted); font-family: var(--font-b); font-size: 11.5px; font-weight: 600; cursor: pointer; position: relative; }
+.tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tab.on { color: var(--cyan); background: rgba(53, 242, 224, .09); }
+.tab.on svg { filter: drop-shadow(0 0 6px var(--cyan)); }
+.tab .dot { position: absolute; top: 4px; right: 22%; min-width: 17px; height: 17px; border-radius: 9px; background: var(--pink); color: #1a0016; font-size: 10.5px; font-weight: 800; display: grid; place-items: center; padding: 0 4px; box-shadow: 0 0 10px var(--pink); }
+
+/* Review */
+.sec-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; cursor: pointer; background: none; border: 0; color: var(--fg); width: 100%; text-align: left; padding: 0; font: inherit; }
+.sec-body { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.sec-body ul { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; }
+.kw { color: var(--cyan); font-weight: 700; }
+.defn { border-left: 3px solid var(--cyan); padding: 10px 14px; background: rgba(53, 242, 224, .06); border-radius: 0 12px 12px 0; }
+.defn b:first-child { font-family: var(--font-d); color: var(--cyan); }
+.tip, .trap { padding: 12px 14px; border-radius: 14px; font-size: 14.5px; }
+.tip { background: rgba(167, 139, 250, .1); border: 1px solid rgba(167, 139, 250, .3); }
+.tip strong { color: var(--violet); }
+.trap { background: rgba(255, 95, 210, .08); border: 1px solid rgba(255, 95, 210, .3); }
+.trap strong { color: var(--pink); }
+.order { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; font-family: var(--font-d); font-weight: 800; font-size: 22px; padding: 6px 0; }
+.el { width: 52px; height: 52px; border-radius: 14px; display: grid; place-items: center; border: 1px solid; position: relative; }
+.el small { position: absolute; bottom: 2px; font-family: var(--font-m); font-size: 8.5px; font-weight: 500; opacity: .8; }
+.el.h { color: #fff; border-color: #fff; box-shadow: 0 0 14px rgba(255, 255, 255, .4); }
+.el.c { color: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 14px rgba(53, 242, 224, .4); }
+.el.o { color: var(--red); border-color: var(--red); box-shadow: 0 0 14px rgba(255, 107, 139, .4); }
+.el.n { color: #6ea8ff; border-color: #6ea8ff; box-shadow: 0 0 14px rgba(110, 168, 255, .4); }
+.gt { color: var(--muted); font-size: 18px; }
+.tbl-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-d); font-size: 12px; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; }
+.done-btn.on { color: var(--lime); border-color: var(--lime); box-shadow: 0 0 14px rgba(157, 255, 122, .3); }
+
+/* Flashcards */
+.flash { perspective: 1200px; cursor: pointer; }
+.flash-in { position: relative; min-height: 190px; transition: transform .55s; transform-style: preserve-3d; }
+.flash.flip .flash-in { transform: rotateY(180deg); }
+.face { position: absolute; inset: 0; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; backface-visibility: hidden; -webkit-backface-visibility: hidden; border: 1px solid var(--line); }
+.face.front { background: linear-gradient(140deg, rgba(53, 242, 224, .14), rgba(167, 139, 250, .12)); font-family: var(--font-d); font-size: 22px; font-weight: 700; }
+.face.back { background: linear-gradient(140deg, rgba(167, 139, 250, .16), rgba(255, 95, 210, .1)); transform: rotateY(180deg); font-size: 16px; }
+
+/* Test */
+.opt-group { display: flex; flex-direction: column; gap: 8px; }
+.lbl { font-family: var(--font-d); font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; color: var(--muted); }
+.qnav { display: flex; gap: 6px; overflow-x: auto; padding: 4px 2px 6px; scrollbar-width: thin; }
+.qn { flex: none; width: 36px; height: 36px; border-radius: 11px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); color: var(--muted); font-family: var(--font-m); font-size: 13px; cursor: pointer; }
+.qn.ans { color: var(--fg); background: rgba(167, 139, 250, .18); border-color: rgba(167, 139, 250, .5); }
+.qn.cur { border-color: var(--cyan); color: var(--cyan); box-shadow: 0 0 12px rgba(53, 242, 224, .45); }
+.qn.ok { background: rgba(157, 255, 122, .15); border-color: var(--lime); color: var(--lime); }
+.qn.bad { background: rgba(255, 107, 139, .15); border-color: var(--red); color: var(--red); }
+.qtext { font-size: 17px; font-weight: 600; white-space: pre-line; }
+.opt { display: grid; grid-template-columns: 32px 1fr; gap: 12px; align-items: center; text-align: left; width: 100%; padding: 12px 14px; border-radius: 15px; border: 1px solid var(--line); background: rgba(255, 255, 255, .03); color: var(--fg); font: inherit; font-size: 15px; cursor: pointer; transition: border-color .15s, background .15s, box-shadow .2s; }
+.opt:hover { border-color: rgba(53, 242, 224, .45); }
+.opt .L { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; font-family: var(--font-m); font-weight: 700; background: rgba(255, 255, 255, .06); }
+.opt.sel { border-color: var(--violet); background: rgba(167, 139, 250, .12); box-shadow: 0 0 16px rgba(167, 139, 250, .3); }
+.opt.sel .L { background: var(--violet); color: #12081f; }
+.opt.right { border-color: var(--lime); background: rgba(157, 255, 122, .1); box-shadow: 0 0 16px rgba(157, 255, 122, .3); }
+.opt.right .L { background: var(--lime); color: #0b1a05; }
+.opt.wrong { border-color: var(--red); background: rgba(255, 107, 139, .1); }
+.opt.wrong .L { background: var(--red); color: #22000a; }
+.opt[disabled] { cursor: default; }
+.explain { padding: 14px; border-radius: 14px; background: rgba(53, 242, 224, .06); border: 1px solid rgba(53, 242, 224, .25); font-size: 14.5px; display: flex; flex-direction: column; gap: 6px; }
+.timer { font-family: var(--font-m); font-weight: 700; color: var(--cyan); text-shadow: 0 0 10px rgba(53, 242, 224, .6); font-variant-numeric: tabular-nums; }
+.timer.low { color: var(--red); text-shadow: 0 0 10px rgba(255, 107, 139, .7); }
+.progress { height: 6px; border-radius: 4px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+.progress i { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--cyan), var(--violet), var(--pink)); box-shadow: 0 0 10px var(--cyan); transition: width .4s; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+.kpi { padding: 12px; border-radius: 14px; background: rgba(255, 255, 255, .03); border: 1px solid var(--line); text-align: center; }
+.kpi b { display: block; font-family: var(--font-d); font-size: 22px; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 12px; color: var(--muted); }
+.kpi.g b { color: var(--lime); } .kpi.r b { color: var(--red); } .kpi.y b { color: var(--amber); } .kpi.c b { color: var(--cyan); }
+.score-ring { display: grid; place-items: center; position: relative; }
+.score-ring svg { width: 170px; height: 170px; transform: rotate(-90deg); }
+.score-ring circle { fill: none; stroke-width: 12; }
+.score-ring .val { position: absolute; text-align: center; }
+.score-ring .val b { font-family: var(--font-d); font-size: 34px; display: block; line-height: 1; }
+
+/* Figures */
+.fig-box { overflow-x: auto; border-radius: 16px; background: rgba(5, 8, 20, .6); border: 1px solid var(--line); padding: 10px; }
+.fig-box svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.fig-box.narrow svg { min-width: 300px; }
+svg text { font-family: var(--font-b); }
+.fnode { cursor: pointer; transition: opacity .25s; outline: none; }
+.fnode:focus-visible rect { stroke-width: 3.5; }
+.fnode rect { transition: filter .25s, stroke-width .25s; }
+.fig-dim .fnode:not(.hl) { opacity: .2; }
+.fig-dim .farrow:not(.hl) { opacity: .12; }
+.farrow { transition: opacity .25s; }
+.fnode.hl rect { stroke-width: 3; }
+.lab-hidden .flabel { opacity: 0; }
+.lab-hidden .fq { opacity: 1; }
+.fq { opacity: 0; pointer-events: none; }
+.lab-hidden .fnode.shown .flabel { opacity: 1; }
+.lab-hidden .fnode.shown .fq { opacity: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 13px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.fig-points { margin: 0; padding-left: 20px; display: flex; flex-direction: column; gap: 4px; font-size: 14.5px; }
+
+.list-item { display: flex; flex-direction: column; gap: 8px; padding: 14px; border-radius: 16px; background: rgba(255, 255, 255, .025); border: 1px solid var(--line); }
+.empty { text-align: center; padding: 28px 18px; }
+.empty svg { width: 64px; height: 64px; stroke: var(--lime); fill: none; stroke-width: 1.6; filter: drop-shadow(0 0 10px var(--lime)); }
+.bar-row { display: flex; flex-direction: column; gap: 5px; }
+.toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; z-index: 20; padding: 10px 18px; border-radius: 14px; background: rgba(13, 18, 38, .95); border: 1px solid var(--cyan); color: var(--fg); box-shadow: 0 0 20px rgba(53, 242, 224, .4); font-weight: 600; font-size: 14px; transition: .3s; pointer-events: none; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.confirm { border-color: rgba(255, 107, 139, .5); }
+@media (max-width: 440px) { .qtext { font-size: 16px; } .glass { padding: 15px; border-radius: 18px; } }
+</style>
+
+<div class="glow-bg" aria-hidden="true"><i></i><i></i><i></i></div>
+<div class="wrap">
+  <header class="top">
+    <button class="brand" id="home" aria-label="Home">
+      <svg viewBox="0 0 40 40" fill="none" stroke="#35f2e0" stroke-width="2.4" stroke-linecap="round"><path d="M12 4c0 10 16 10 16 20s-16 10-16 12"/><path d="M28 4c0 10-16 10-16 20s16 10 16 12" stroke="#ff5fd2"/><path d="M14 10h12M13 20h14M15 30h10" stroke="#a78bfa" stroke-width="2"/></svg>
+      <span>Neon<b>Bio</b></span><small>IMAT</small>
+    </button>
+    <span class="top-meta" id="meta"></span>
+  </header>
+  <main id="app" class="stack" style="gap:16px"></main>
+</div>
+<nav class="tabs" id="tabs" hidden><div class="bar" id="tabbar"></div></nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================================
+   CONTENT — add new pages / chapters here.
+   Chapter 2 so far: Cambridge AS & A Level Biology, 2.1 + 2.2 + Fig 2.2
+   ===================================================================== */
+const CHAPTERS = [
+  { id: 1, title: "Cell structure", locked: true },
+  {
+    id: 2, title: "Biological molecules", pages: "2.1 Biochemistry · 2.2 The building blocks of life",
+    topics: { s21: "2.1 Biochemistry", s22: "2.2 Elements & carbon", fig: "Fig 2.2 Building blocks" },
+    sections: [
+      {
+        id: "s21", tag: "2.1", title: "Biochemistry", figs: ["metab"],
+        html: `
+<div class="defn"><b>Biochemistry</b> looks at the chemical reactions of biological molecules.</div>
+<div class="defn"><b>Metabolism</b> is the <b>sum total of all the biochemical reactions</b> in the body.</div>
+<h4>Underlying simplicity</h4>
+<p>Biochemistry may look complicated, but it has an underlying simplicity. Only <span class="kw">20 common amino acids</span> are used to make proteins, although theoretically there could be <b>millions</b>.</p>
+<p>Having a <b>limited variety of molecules</b> makes it <span class="kw">easier to control metabolism</span>.</p>
+<h4>Structure and function</h4>
+<p>Another feature of biochemistry is the <b>close link between the structure of molecules and their functions</b>. This becomes clear in Chapter 2 and Chapter 3.</p>
+<div class="tip"><strong>IMAT logic:</strong> fewer kinds of building blocks means fewer enzymes and pathways to manage, so metabolism is easier to control. If a question imagines 200 amino acids instead of 20, the answer is "metabolism would be harder to control".</div>
+<div class="trap"><strong>Trap:</strong> biochemistry is the <b>study</b>; metabolism is the <b>reactions themselves</b>. Metabolism means <b>all</b> reactions (building up and breaking down), not only respiration or digestion.</div>`
+      },
+      {
+        id: "s22", tag: "2.2", title: "The building blocks of life", figs: ["elements", "carbon", "evo"],
+        html: `
+<p>The four most common elements in living organisms, <b>in order of abundance</b>:</p>
+<div class="order"><span class="el h">H<small>1st</small></span><span class="gt">&gt;</span><span class="el c">C<small>2nd</small></span><span class="gt">&gt;</span><span class="el o">O<small>3rd</small></span><span class="gt">&gt;</span><span class="el n">N<small>4th</small></span></div>
+<p>Together they account for <span class="kw">more than 99% of the atoms</span> found in all living things.</p>
+<h4>Why carbon matters</h4>
+<p>Carbon atoms can <b>join together to form long chains or ring structures</b>. These are the <span class="kw">basic skeletons of organic molecules</span>. Other atoms, with <b>different functions</b>, are attached to the carbon skeletons.</p>
+<div class="defn"><b>Organic molecules</b> are molecules that contain carbon.</div>
+<h4>Chemical evolution</h4>
+<p>Before life evolved, there was probably a period of <b>chemical evolution</b>: simple carbon-based biological molecules evolved from even simpler molecules.</p>
+<p>The simple biological molecules are <b>relatively limited in variety</b>. They act as the <span class="kw">building blocks</span> for larger, complex biological molecules (Figure 2.2).</p>
+<div class="tbl-wrap"><table>
+<tr><th>Simple biological molecule</th><th>Complex biological molecule</th></tr>
+<tr><td>monosaccharides</td><td>polysaccharides</td></tr>
+<tr><td>organic bases + monosaccharides → nucleotides</td><td>nucleic acids</td></tr>
+<tr><td>amino acids</td><td>proteins</td></tr>
+<tr><td>fatty acids and glycerol</td><td>lipids</td></tr>
+</table></div>
+<div class="tip"><strong>Read Fig 2.2 carefully:</strong> monosaccharides have <b>two arrows</b> (to polysaccharides and to nucleotides). Nucleotides are the only box that is made from simple molecules <b>and</b> is itself a building block. Lipids need <b>two kinds</b> of building block.</div>
+<div class="trap"><strong>Traps:</strong> by number of <b>atoms</b>, hydrogen is first (by <b>mass</b> oxygen would be first). Organic bases are part of nucleotides, not a complex molecule on their own. Nucleotides are coloured as <b>simple</b> molecules in Fig 2.2.</div>
+<p class="small muted">Extra for understanding: carbohydrates and simple fats contain only C, H and O. Nitrogen is the element that marks amino acids (proteins) and organic bases (nucleic acids).</p>`
+      }
+    ],
+    flashcards: [
+      ["Biochemistry", "The study of the chemical reactions of biological molecules."],
+      ["Metabolism", "The sum total of all the biochemical reactions in the body."],
+      ["Why only 20 amino acids?", "A limited variety of molecules makes metabolism easier to control (underlying simplicity)."],
+      ["Second feature of biochemistry", "A close link between the structure of molecules and their functions."],
+      ["4 most common elements", "Hydrogen > carbon > oxygen > nitrogen (by abundance of atoms)."],
+      ["HCON share of atoms", "More than 99% of the atoms in all living things."],
+      ["Why is carbon special?", "C atoms join to form long chains or rings: the skeletons of organic molecules."],
+      ["Organic molecule", "A molecule that contains carbon."],
+      ["Chemical evolution", "Before life: simple carbon-based molecules evolved from even simpler molecules."],
+      ["Simple biological molecules", "Relatively limited in variety; building blocks for larger, complex molecules."],
+      ["Monosaccharides →", "Polysaccharides, and (with organic bases) nucleotides."],
+      ["Nucleotides →", "Nucleic acids. Nucleotides are made from organic bases + monosaccharides."],
+      ["Amino acids →", "Proteins."],
+      ["Fatty acids + glycerol →", "Lipids."]
+    ],
+    questions: [
+      { id: "q1", t: "s22", q: "Which of the following lists the four most common elements in living organisms in decreasing order of abundance (by number of atoms)?",
+        o: ["Carbon, hydrogen, oxygen, nitrogen", "Hydrogen, carbon, oxygen, nitrogen", "Oxygen, carbon, hydrogen, nitrogen", "Hydrogen, oxygen, carbon, nitrogen", "Carbon, oxygen, nitrogen, hydrogen"], a: 1,
+        e: "The coursebook order is hydrogen, carbon, oxygen, nitrogen. Together they make up more than 99% of the atoms in living things.", tip: "Atoms: H > C > O > N (remember 'HCON')." },
+      { id: "q2", t: "s21", q: "Which of the following is the best definition of metabolism?",
+        o: ["All the reactions that break large molecules into smaller ones", "All the enzyme-controlled reactions of respiration", "The sum total of all the biochemical reactions in the body", "The chemical reactions involved in digesting food", "The study of the chemical reactions of biological molecules"], a: 2,
+        e: "Metabolism is the sum total of all the biochemical reactions in the body. 'The study of the chemical reactions of biological molecules' is biochemistry.", tip: "Biochemistry = the study. Metabolism = all the reactions." },
+      { id: "q3", t: "s22", fixed: true, q: "Consider the following statements:\n1. Hydrogen, carbon, oxygen and nitrogen make up more than 99% of the atoms in living things.\n2. Oxygen is the most abundant atom in living organisms.\n3. Carbon atoms can join together to form long chains or rings.\nWhich of the statements is/are correct?",
+        o: ["1 only", "2 only", "1 and 3 only", "2 and 3 only", "1, 2 and 3"], a: 2,
+        e: "1 is correct. 2 is wrong: by number of atoms hydrogen is the most abundant. 3 is correct: carbon chains and rings are the skeletons of organic molecules.", tip: "Atom count: H first. Carbon = chains and rings." },
+      { id: "q4", t: "fig", q: "According to Figure 2.2, monosaccharides contribute to the formation of which complex biological molecules?",
+        o: ["Polysaccharides only", "Polysaccharides and nucleic acids", "Polysaccharides and lipids", "Nucleic acids and proteins", "Polysaccharides, nucleic acids and lipids"], a: 1,
+        e: "Monosaccharides join to form polysaccharides. A monosaccharide also combines with an organic base to form nucleotides, which form nucleic acids (the curved arrow in Fig 2.2).", tip: "Monosaccharides have TWO arrows in Fig 2.2." },
+      { id: "q5", t: "fig", q: "In Figure 2.2, which molecule is made from other simple biological molecules and is itself a building block for a complex molecule?",
+        o: ["Organic base", "Glycerol", "Nucleotide", "Amino acid", "Lipid"], a: 2,
+        e: "Nucleotides are formed from organic bases and monosaccharides, and nucleotides then form nucleic acids. Organic bases, glycerol and amino acids are starting building blocks; a lipid is a complex end product.", tip: "Nucleotide = the middle box of Fig 2.2." },
+      { id: "q6", t: "fig", q: "Which pairing of a simple biological molecule with the complex molecule it builds is correct?",
+        o: ["Fatty acids → polysaccharides", "Organic bases → proteins", "Amino acids → proteins", "Glycerol → nucleic acids", "Monosaccharides → lipids"], a: 2,
+        e: "Amino acids → proteins. Also: monosaccharides → polysaccharides; organic bases (+ sugar) → nucleotides → nucleic acids; fatty acids + glycerol → lipids.", tip: "Sugar→polysaccharide, base→nucleotide→nucleic acid, amino acid→protein, FA + glycerol→lipid." },
+      { id: "q7", t: "fig", q: "Which of the following is classified in Figure 2.2 as a complex biological molecule?",
+        o: ["Glycerol", "Nucleotide", "Amino acid", "Lipid", "Organic base"], a: 3,
+        e: "The complex molecules in Fig 2.2 are polysaccharides, nucleic acids, proteins and lipids. The others are simple biological molecules.", tip: "Complex = polysaccharides, nucleic acids, proteins, lipids." },
+      { id: "q8", t: "fig", q: "A complex biological molecule from Figure 2.2 is completely broken down. The products include organic bases. The molecule was most likely:",
+        o: ["a polysaccharide", "a protein", "a lipid", "a nucleic acid", "glycogen"], a: 3,
+        e: "Organic bases are part of nucleotides, and nucleotides make up nucleic acids. Polysaccharides (such as glycogen) give monosaccharides, proteins give amino acids, and lipids give fatty acids and glycerol.", tip: "Organic bases come only from nucleotides / nucleic acids." },
+      { id: "q9", t: "s22", q: "Of the four most common elements in living organisms, which one is found in both proteins and nucleic acids but NOT in simple carbohydrates such as glucose?",
+        o: ["Carbon", "Hydrogen", "Oxygen", "Nitrogen", "Sulfur"], a: 3,
+        e: "Carbohydrates contain only C, H and O. Amino acids and the organic (nitrogenous) bases of nucleotides both contain nitrogen. Sulfur is not one of the four main elements and is not in nucleic acids.", tip: "Carbohydrates = CHO only. N → proteins and nucleic acids." },
+      { id: "q10", t: "s21", q: "Imagine an organism that built its proteins from 200 different amino acids instead of 20. Based on the coursebook's reasoning, what would be the most likely consequence?",
+        o: ["Its proteins could no longer be broken down", "Its metabolism would be harder to control", "It would need fewer enzymes", "Its proteins would not contain carbon", "It would no longer need nucleic acids"], a: 1,
+        e: "A limited variety of molecules makes metabolism easier to control. More kinds of building blocks means more pathways and enzymes to regulate.", tip: "Variety up → control of metabolism down." },
+      { id: "q11", t: "s22", q: "In a living organism, approximately what proportion of all atoms are elements OTHER than hydrogen, carbon, oxygen and nitrogen?",
+        o: ["Less than 1%", "About 5%", "About 10%", "About 25%", "About 50%"], a: 0,
+        e: "H, C, O and N account for more than 99% of atoms, so all other elements together are less than 1%.", tip: "HCON > 99% → everything else < 1%." },
+      { id: "q12", t: "s22", fixed: true, q: "Consider the following statements about the origin of biological molecules:\n1. Before life evolved there was a period of chemical evolution.\n2. Simple carbon-based molecules evolved from even simpler molecules.\n3. Simple biological molecules are extremely varied.\nWhich of the statements is/are correct?",
+        o: ["1 only", "1 and 2 only", "2 and 3 only", "1 and 3 only", "1, 2 and 3"], a: 1,
+        e: "1 and 2 match the coursebook. 3 is wrong: simple biological molecules are relatively LIMITED in variety.", tip: "Simple molecules = limited variety." },
+      { id: "q13", t: "s22", q: "Which statement best describes the role of carbon in organic molecules?",
+        o: ["Carbon atoms carry out the functions of the molecule, while other atoms form the skeleton", "Carbon atoms form chains or rings that act as a skeleton, to which other atoms with different functions are attached", "Carbon atoms only form rings, never chains", "Carbon is present only in proteins and nucleic acids", "Carbon atoms form ionic bonds that hold the molecule together"], a: 1,
+        e: "Carbon chains and rings are the basic skeletons of organic molecules; other atoms with different functions are attached to them.", tip: "Carbon = skeleton; other atoms = function." },
+      { id: "q14", t: "fig", q: "Which of the following arrows would be INCORRECT if added to Figure 2.2?",
+        o: ["Monosaccharides → polysaccharides", "Organic bases → nucleotides", "Nucleotides → nucleic acids", "Glycerol → polysaccharides", "Fatty acids and glycerol → lipids"], a: 3,
+        e: "Glycerol combines with fatty acids to form lipids. Polysaccharides are built only from monosaccharides.", tip: "Glycerol belongs only to the lipid column." },
+      { id: "q15", t: "s21", q: "Which statement correctly distinguishes biochemistry from metabolism?",
+        o: ["Biochemistry is the sum of all reactions in the body; metabolism is the study of those reactions", "Biochemistry looks at the chemical reactions of biological molecules; metabolism is the sum total of all biochemical reactions in the body", "Both terms mean exactly the same thing", "Biochemistry only studies proteins; metabolism only involves carbohydrates", "Metabolism takes place only outside cells; biochemistry only inside cells"], a: 1,
+        e: "Biochemistry is the subject that looks at the reactions; metabolism is the sum total of those reactions in the body.", tip: "Biochemistry = subject. Metabolism = the reactions." },
+      { id: "q16", t: "fig", fixed: true, q: "Consider the following statements about Figure 2.2:\n1. Every complex molecule shown is made from only one type of simple molecule.\n2. Nucleic acids are made from nucleotides.\n3. Proteins are made from amino acids.\nWhich of the statements is/are correct?",
+        o: ["1 only", "2 only", "2 and 3 only", "1 and 3 only", "1, 2 and 3"], a: 2,
+        e: "2 and 3 are correct. 1 is wrong: lipids are made from fatty acids AND glycerol.", tip: "Lipids need TWO kinds of building block." },
+      { id: "q17", t: "s21", q: "The coursebook says 'only 20 common amino acids are used to make proteins'. This is given as an example of:",
+        o: ["the close link between structure and function", "the underlying simplicity of biochemistry", "chemical evolution before life", "the abundance of nitrogen in living things", "the variety of simple biological molecules"], a: 1,
+        e: "The 20 amino acids example shows the underlying simplicity of biochemistry: a limited variety of molecules, which makes metabolism easier to control.", tip: "20 amino acids → underlying simplicity." },
+      { id: "q18", t: "s22", q: "According to the coursebook, organic molecules are best described as molecules that:",
+        o: ["are made only by living organisms", "contain carbon", "contain nitrogen", "are always polymers", "dissolve easily in water"], a: 1,
+        e: "The coursebook defines organic molecules simply as molecules that contain carbon, built on carbon chains or rings.", tip: "Organic = contains carbon." },
+      { id: "q19", t: "s21", q: "Apart from its underlying simplicity, which other feature of biochemistry does the coursebook highlight?",
+        o: ["Most biological molecules are inorganic", "There is a close link between the structures of molecules and their functions", "Every reaction in the body is reversible", "Complex molecules cannot be broken down", "Metabolism uses millions of different amino acids"], a: 1,
+        e: "The second feature is the close link between the structures of molecules and their functions, explored in Chapters 2 and 3.", tip: "Two features: simplicity + structure–function link." },
+      { id: "q20", t: "fig", fixed: true, q: "Using the colour key of Figure 2.2, consider the following statements:\n1. Amino acids are simple biological molecules.\n2. Nucleotides are complex biological molecules.\n3. Polysaccharides are complex biological molecules.\nWhich of the statements is/are correct?",
+        o: ["1 only", "1 and 3 only", "2 and 3 only", "1 and 2 only", "1, 2 and 3"], a: 1,
+        e: "In Fig 2.2 nucleotides are in the simple (violet) group, even though they are made from other simple molecules. Amino acids are simple; polysaccharides are complex.", tip: "Nucleotides are SIMPLE molecules in Fig 2.2." }
+    ],
+    figures: [
+      { id: "fig22", title: "Figure 2.2 · The building blocks of life", draw: "fig22", interactive: true,
+        caption: "Simple biological molecules join together to form larger, more complex molecules. Tap a box to light up its pathway.",
+        points: ["Monosaccharides → polysaccharides, and (with organic bases) → nucleotides", "Nucleotides → nucleic acids", "Amino acids → proteins", "Fatty acids and glycerol → lipids"] },
+      { id: "elements", title: "The four most common elements", draw: "elements",
+        caption: "In order of abundance (by number of atoms). Together H, C, O and N make up more than 99% of the atoms in living things.",
+        points: ["1st hydrogen, 2nd carbon, 3rd oxygen, 4th nitrogen", "All other elements together: less than 1% of atoms", "Model colours: H white, C black (shown cyan), O red, N blue"] },
+      { id: "carbon", title: "Carbon skeletons: chains and rings", draw: "carbon",
+        caption: "Carbon atoms join into long chains or rings. Other atoms with different functions attach to the skeleton.",
+        points: ["Each carbon forms 4 covalent bonds", "Chains and rings = skeletons of organic molecules", "Attached groups such as –OH, –NH₂, –COOH give different functions"] },
+      { id: "evo", title: "Chemical evolution to life", draw: "evo",
+        caption: "Before life evolved: even simpler molecules → simple carbon-based molecules → complex biological molecules.",
+        points: ["Simple biological molecules are limited in variety", "They are the building blocks for complex molecules", "Example simpler molecules shown are for illustration"] },
+      { id: "metab", title: "Metabolism = all the reactions", draw: "metab",
+        caption: "Extra for understanding: metabolism includes reactions that build complex molecules and reactions that break them down.",
+        points: ["Metabolism = sum total of all biochemical reactions", "Limited variety of building blocks → easier control", "Biochemistry is the study of these reactions"] }
+    ]
+  },
+  { id: 3, title: "Enzymes", locked: true }
+];
+
+/* =====================================================================
+   FIGURES (inline SVG)
+   ===================================================================== */
+const SIMPLE = { f: "rgba(167,139,250,.16)", s: "#a78bfa" }, COMPLEX = { f: "rgba(53,242,224,.14)", s: "#35f2e0" };
+function box(id, x, y, w, h, lines, kind) {
+  const c = kind === "s" ? SIMPLE : COMPLEX, glow = kind === "s" ? "gv" : "gc";
+  const ty = y + h / 2 - (lines.length - 1) * 10;
+  return `<g class="fnode" data-n="${id}" tabindex="0" role="button" aria-label="${lines.join(" ")}">
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="14" fill="${c.f}" stroke="${c.s}" stroke-width="2" filter="url(#${glow})"/>
+    <text class="flabel" x="${x + w / 2}" y="${ty}" text-anchor="middle" dominant-baseline="middle" fill="#e9edff" font-size="17" font-weight="700">${lines.map((l, i) => `<tspan x="${x + w / 2}" dy="${i ? 20 : 0}">${l}</tspan>`).join("")}</text>
+    <text class="fq" x="${x + w / 2}" y="${y + h / 2}" text-anchor="middle" dominant-baseline="middle" fill="${c.s}" font-size="26" font-weight="800">?</text>
+  </g>`;
+}
+const DEFS = `<defs>
+  <filter id="gc" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.5" result="b"/><feFlood flood-color="#35f2e0" flood-opacity=".55"/><feComposite in2="b" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="gv" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3.5" result="b"/><feFlood flood-color="#a78bfa" flood-opacity=".55"/><feComposite in2="b" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="gp" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="b"/><feFlood flood-color="#ff5fd2" flood-opacity=".6"/><feComposite in2="b" operator="in"/><feMerge><feMergeNode/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#e9edff"/></marker>
+  <marker id="ahp" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#ff5fd2"/></marker>
+</defs>`;
+const FIG = {
+  fig22() {
+    const A = (id, d) => `<path class="farrow" data-a="${id}" d="${d}" fill="none" stroke="#e9edff" stroke-width="3" marker-end="url(#ah)"/>`;
+    return `<svg viewBox="0 0 760 360" role="img" aria-label="Figure 2.2 building blocks of life">${DEFS}
+      ${A("mono-poly", "M115 82 V262")}
+      ${A("mono-nuc", "M190 82 C190 118 300 112 330 118 C350 122 356 128 356 150")}
+      ${A("base-nuc", "M360 82 V150")}
+      ${A("nuc-na", "M360 206 V262")}
+      ${A("aa-pro", "M535 82 V262")}
+      ${A("fa-lip", "M680 82 V262")}
+      ${box("mono", 20, 20, 210, 62, ["monosaccharides"], "s")}
+      ${box("base", 290, 20, 140, 62, ["organic", "bases"], "s")}
+      ${box("aa", 465, 20, 140, 62, ["amino", "acids"], "s")}
+      ${box("fa", 620, 20, 125, 62, ["fatty acids", "and glycerol"], "s")}
+      ${box("nuc", 280, 150, 160, 56, ["nucleotides"], "s")}
+      ${box("poly", 20, 270, 210, 62, ["polysaccharides"], "c")}
+      ${box("na", 290, 270, 140, 62, ["nucleic", "acids"], "c")}
+      ${box("pro", 465, 270, 140, 62, ["proteins"], "c")}
+      ${box("lip", 625, 270, 115, 62, ["lipids"], "c")}
+    </svg>`;
+  },
+  elements() {
+    const els = [["H", "hydrogen", "#ffffff", 1], ["C", "carbon", "#35f2e0", 2], ["O", "oxygen", "#ff6b8b", 3], ["N", "nitrogen", "#6ea8ff", 4]];
+    const hs = [190, 150, 115, 80];
+    const bars = els.map(([s, n, c, r], i) => {
+      const x = 40 + i * 120, h = hs[i], y = 250 - h;
+      return `<rect x="${x}" y="${y}" width="86" height="${h}" rx="12" fill="${c}" fill-opacity=".14" stroke="${c}" stroke-width="2" filter="url(#gc)"/>
+        <text x="${x + 43}" y="${y + 40}" text-anchor="middle" fill="${c}" font-size="34" font-weight="800" font-family="Sora,sans-serif">${s}</text>
+        <text x="${x + 43}" y="272" text-anchor="middle" fill="#e9edff" font-size="14" font-weight="600">${n}</text>
+        <text x="${x + 43}" y="${y - 10}" text-anchor="middle" fill="#98a0c8" font-size="13" font-family="JetBrains Mono,monospace">${r}${["st", "nd", "rd", "th"][i]}</text>`;
+    }).join("");
+    const R = 62, C = 2 * Math.PI * R;
+    return `<svg viewBox="0 0 760 300" role="img" aria-label="Order of abundance H C O N">${DEFS}
+      <text x="40" y="26" fill="#98a0c8" font-size="13" font-family="JetBrains Mono,monospace">RANK BY NUMBER OF ATOMS (height shows order only)</text>
+      ${bars}
+      <g transform="translate(640 150)">
+        <circle r="${R}" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="18"/>
+        <circle r="${R}" fill="none" stroke="#35f2e0" stroke-width="18" stroke-dasharray="${C * 0.99} ${C}" transform="rotate(-90)" filter="url(#gc)"/>
+        <circle r="${R}" fill="none" stroke="#ff5fd2" stroke-width="18" stroke-dasharray="${C * 0.012} ${C}" stroke-dashoffset="${-C * 0.99}" transform="rotate(-90)"/>
+        <text y="-4" text-anchor="middle" fill="#e9edff" font-size="22" font-weight="800" font-family="Sora,sans-serif">&gt;99%</text>
+        <text y="16" text-anchor="middle" fill="#98a0c8" font-size="12">H + C + O + N</text>
+        <text y="${R + 36}" text-anchor="middle" fill="#ff5fd2" font-size="12.5">others &lt;1%</text>
+      </g>
+    </svg>`;
+  },
+  carbon() {
+    const atom = (x, y, l, c) => `<circle cx="${x}" cy="${y}" r="17" fill="${c}" fill-opacity=".18" stroke="${c}" stroke-width="2"/><text x="${x}" y="${y + 1}" text-anchor="middle" dominant-baseline="middle" fill="${c}" font-size="14" font-weight="800">${l}</text>`;
+    const bond = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#98a0c8" stroke-width="2.5"/>`;
+    let chain = "", cx = [40, 100, 160, 220, 280];
+    cx.forEach((x, i) => { if (i) chain += bond(cx[i - 1] + 17, 120, x - 17, 120); chain += bond(x, 103, x, 78) + bond(x, 137, x, 162); });
+    chain += bond(cx[0] - 17, 120, 8, 120);
+    cx.forEach((x, i) => { chain += atom(x, 120, "C", "#35f2e0") + atom(x, 62, i === 2 ? "O" : "H", i === 2 ? "#ff6b8b" : "#ffffff") + atom(x, 178, i === 4 ? "N" : "H", i === 4 ? "#6ea8ff" : "#ffffff"); });
+    const hex = [], cxr = 560, cyr = 130, r = 62;
+    for (let i = 0; i < 6; i++) { const a = Math.PI / 3 * i - Math.PI / 2; hex.push([cxr + r * Math.cos(a), cyr + r * Math.sin(a)]); }
+    let ring = "";
+    hex.forEach((p, i) => { const q = hex[(i + 1) % 6]; ring += bond(p[0], p[1], q[0], q[1]); });
+    const outs = [[0, "OH", "#ff6b8b"], [2, "H", "#ffffff"], [4, "NH₂", "#6ea8ff"]];
+    outs.forEach(([i, l, c]) => { const [x, y] = hex[i], dx = (x - cxr) / r, dy = (y - cyr) / r; ring += bond(x, y, x + dx * 42, y + dy * 42) + `<text x="${x + dx * 62}" y="${y + dy * 58 + 5}" text-anchor="middle" fill="${c}" font-size="15" font-weight="800">${l}</text>`; });
+    hex.forEach(([x, y]) => ring += atom(x, y, "C", "#35f2e0"));
+    return `<svg viewBox="0 0 760 260" role="img" aria-label="Carbon chain and carbon ring skeletons">${DEFS}
+      <text x="20" y="26" fill="#98a0c8" font-size="13" font-family="JetBrains Mono,monospace">CHAIN</text>
+      <text x="470" y="26" fill="#98a0c8" font-size="13" font-family="JetBrains Mono,monospace">RING</text>
+      <g transform="translate(20 0)">${chain}</g>${ring}
+      <text x="160" y="240" text-anchor="middle" fill="#e9edff" font-size="14">carbon skeleton + attached atoms (O, N, H)</text>
+      <text x="560" y="240" text-anchor="middle" fill="#e9edff" font-size="14">ring of carbon atoms + attached groups</text>
+    </svg>`;
+  },
+  evo() {
+    const st = [["Even simpler molecules", "e.g. H₂O, CH₄, NH₃, CO₂", "#98a0c8"], ["Simple biological molecules", "carbon-based, limited variety", "#a78bfa"], ["Complex biological molecules", "polysaccharides, nucleic acids, proteins, lipids", "#35f2e0"], ["Life", "cells", "#9dff7a"]];
+    let g = "";
+    st.forEach(([t, s, c], i) => {
+      const y = 22 + i * 82;
+      g += `<rect x="150" y="${y}" width="460" height="60" rx="14" fill="${c}" fill-opacity=".1" stroke="${c}" stroke-width="2" filter="url(#gc)"/>
+        <text x="380" y="${y + 25}" text-anchor="middle" fill="${c}" font-size="17" font-weight="800">${t}</text>
+        <text x="380" y="${y + 46}" text-anchor="middle" fill="#98a0c8" font-size="13">${s}</text>`;
+      if (i < 3) g += `<path d="M380 ${y + 62} V${y + 78}" stroke="#ff5fd2" stroke-width="3" marker-end="url(#ahp)"/>`;
+    });
+    return `<svg viewBox="0 0 760 350" role="img" aria-label="Chemical evolution">${DEFS}
+      <text x="40" y="70" fill="#ff5fd2" font-size="14" font-weight="800" transform="rotate(-90 40 70)" text-anchor="end">chemical evolution</text>
+      <path d="M60 30 V260" stroke="#ff5fd2" stroke-width="3" marker-end="url(#ahp)" filter="url(#gp)"/>${g}</svg>`;
+  },
+  metab() {
+    return `<svg viewBox="0 0 760 250" role="img" aria-label="Metabolism includes building up and breaking down">${DEFS}
+      <rect x="30" y="80" width="200" height="80" rx="16" fill="rgba(167,139,250,.14)" stroke="#a78bfa" stroke-width="2" filter="url(#gv)"/>
+      <text x="130" y="115" text-anchor="middle" fill="#e9edff" font-size="17" font-weight="800">simple</text>
+      <text x="130" y="138" text-anchor="middle" fill="#98a0c8" font-size="13">building blocks</text>
+      <rect x="530" y="80" width="200" height="80" rx="16" fill="rgba(53,242,224,.12)" stroke="#35f2e0" stroke-width="2" filter="url(#gc)"/>
+      <text x="630" y="115" text-anchor="middle" fill="#e9edff" font-size="17" font-weight="800">complex</text>
+      <text x="630" y="138" text-anchor="middle" fill="#98a0c8" font-size="13">biological molecules</text>
+      <path d="M240 98 C330 40 430 40 520 98" fill="none" stroke="#35f2e0" stroke-width="3" marker-end="url(#ah)"/>
+      <text x="380" y="46" text-anchor="middle" fill="#35f2e0" font-size="14" font-weight="700">building up</text>
+      <path d="M520 142 C430 200 330 200 240 142" fill="none" stroke="#ff5fd2" stroke-width="3" marker-end="url(#ahp)"/>
+      <text x="380" y="212" text-anchor="middle" fill="#ff5fd2" font-size="14" font-weight="700">breaking down</text>
+      <text x="380" y="125" text-anchor="middle" fill="#e9edff" font-size="16" font-weight="800" font-family="Sora,sans-serif">METABOLISM</text>
+      <text x="380" y="145" text-anchor="middle" fill="#98a0c8" font-size="12.5">sum total of all reactions</text>
+    </svg>`;
+  }
+};
+/* Pathways lit when a Fig 2.2 box is tapped */
+const PATHS = {
+  mono: [["mono", "poly", "nuc", "na"], ["mono-poly", "mono-nuc", "nuc-na"]], base: [["base", "nuc", "na"], ["base-nuc", "nuc-na"]],
+  nuc: [["mono", "base", "nuc", "na"], ["mono-nuc", "base-nuc", "nuc-na"]], na: [["mono", "base", "nuc", "na"], ["mono-nuc", "base-nuc", "nuc-na"]],
+  aa: [["aa", "pro"], ["aa-pro"]], pro: [["aa", "pro"], ["aa-pro"]], fa: [["fa", "lip"], ["fa-lip"]], lip: [["fa", "lip"], ["fa-lip"]],
+  poly: [["mono", "poly"], ["mono-poly"]]
+};
+
+/* =====================================================================
+   STATE (saved on this device)
+   ===================================================================== */
+const KEY = "neonbio-imat-v1";
+const blank = () => ({ reviewed: {}, known: {}, qs: {}, mistakes: {}, tests: [] });
+let S = blank();
+try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch (e) {}
+const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+const $ = (s, el = document) => el.querySelector(s);
+const app = $("#app");
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const toast = (m) => { const t = $("#toast"); t.textContent = m; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 1800); };
+const getCh = (id) => CHAPTERS.find((c) => c.id === id);
+const LET = "ABCDE";
+
+const ui = { ch: null, tab: "review", open: { s21: true }, rmode: "notes", fc: 0, flip: false, fig: { hide: false, shown: {}, hl: null } };
+let T = null; // running test
+let timerH = null;
+
+function mastery(C) {
+  const r = C.sections.filter((s) => S.reviewed[s.id]).length / C.sections.length;
+  const k = C.flashcards.filter((f, i) => S.known[C.id + ":" + i]).length / C.flashcards.length;
+  const q = C.questions.filter((x) => (S.qs[x.id] || {}).c > 0).length / C.questions.length;
+  return Math.round((r * 0.3 + k * 0.2 + q * 0.5) * 100);
+}
+function ring(p, size = 52) {
+  const r = size / 2 - 5, c = 2 * Math.PI * r;
+  return `<svg class="ring" viewBox="0 0 ${size} ${size}" style="width:${size}px;height:${size}px"><circle cx="${size / 2}" cy="${size / 2}" r="${r}" stroke="rgba(255,255,255,.08)"/><circle cx="${size / 2}" cy="${size / 2}" r="${r}" stroke="#35f2e0" stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - p / 100)}" transform="rotate(-90 ${size / 2} ${size / 2})" style="filter:drop-shadow(0 0 5px #35f2e0)"/><text x="50%" y="53%" text-anchor="middle" dominant-baseline="middle" fill="#e9edff" font-size="12" font-weight="700" font-family="JetBrains Mono,monospace">${p}%</text></svg>`;
+}
+
+/* =====================================================================
+   VIEWS
+   ===================================================================== */
+function render() {
+  clearInterval(timerH);
+  window.scrollTo(0, 0);
+  if (T && !T.done) return renderTest();
+  if (T && T.done) return renderResults();
+  if (!ui.ch) return renderHome();
+  renderChapter();
+}
+
+function renderHome() {
+  $("#tabs").hidden = true; $("#meta").textContent = "";
+  app.innerHTML = `
+  <section class="glass hero">
+    <span class="badge pk">IMAT · Cambridge AS &amp; A Level</span>
+    <h1 style="margin-top:12px">Biology that <span class="neon-text">glows</span>.</h1>
+    <p class="muted">Pick a chapter. Each one has Review notes, an IMAT-style Test, Figures, your Mistakes and your Progress. New pages are added as you study them.</p>
+  </section>
+  <h3 style="margin-top:4px">Choose a chapter</h3>
+  <div class="stack">
+    ${CHAPTERS.map((c) => c.locked
+      ? `<div class="glass ch-card locked" aria-disabled="true"><span class="ch-num">${c.id}</span><div><h3>${c.title}</h3><p class="small muted">Pages not added yet</p></div><span class="badge">soon</span></div>`
+      : `<button class="glass ch-card" data-ch="${c.id}"><span class="ch-num">${c.id}</span><div style="min-width:0"><h3>${c.title}</h3><p class="small muted">${c.pages}</p><p class="small" style="margin-top:4px;color:var(--cyan)">${c.questions.length} questions · ${c.figures.length} figures · ${c.flashcards.length} flashcards</p></div>${ring(mastery(c))}</button>`).join("")}
+  </div>`;
+  app.querySelectorAll("[data-ch]").forEach((b) => (b.onclick = () => { ui.ch = +b.dataset.ch; ui.tab = "review"; render(); }));
+}
+
+const ICONS = {
+  review: '<path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6M8 11h6"/>',
+  test: '<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 12l3 3 5-6"/>',
+  figures: '<circle cx="8" cy="8" r="3.2"/><circle cx="16.5" cy="16" r="3.2"/><path d="M10.3 10.2l4 3.6"/><rect x="3" y="3" width="18" height="18" rx="4"/>',
+  mistakes: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.3v.2"/>',
+  progress: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
+};
+function renderChapter() {
+  const C = getCh(ui.ch);
+  $("#meta").textContent = `Ch ${C.id} · ${mastery(C)}%`;
+  const nm = Object.keys(S.mistakes).filter((id) => C.questions.some((q) => q.id === id)).length;
+  $("#tabs").hidden = false;
+  $("#tabbar").innerHTML = ["review", "test", "figures", "mistakes", "progress"].map((t) => `<button class="tab ${ui.tab === t ? "on" : ""}" data-tab="${t}"><svg viewBox="0 0 24 24">${ICONS[t]}</svg>${t[0].toUpperCase() + t.slice(1)}${t === "mistakes" && nm ? `<span class="dot">${nm}</span>` : ""}</button>`).join("");
+  $("#tabbar").querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { ui.tab = b.dataset.tab; render(); }));
+  app.innerHTML = `<div class="ch-head"><button class="back" id="back" aria-label="Back to chapters">‹</button><div style="min-width:0"><h2>${C.title}</h2><p class="small muted">Chapter ${C.id} · ${C.pages}</p></div></div><div id="view" class="stack" style="gap:14px"></div>`;
+  $("#back").onclick = () => { ui.ch = null; render(); };
+  ({ review: vReview, test: vTestSetup, figures: vFigures, mistakes: vMistakes, progress: vProgress })[ui.tab](C, $("#view"));
+}
+
+/* ---------- Review ---------- */
+function vReview(C, el) {
+  const done = C.sections.filter((s) => S.reviewed[s.id]).length;
+  el.innerHTML = `<div class="row between"><div class="row"><span class="chip ${ui.rmode === "notes" ? "on" : ""}" data-m="notes">Notes</span><span class="chip ${ui.rmode === "cards" ? "on" : ""}" data-m="cards">Flashcards</span></div><span class="small muted mono">${done}/${C.sections.length} reviewed</span></div><div id="rv" class="stack" style="gap:14px"></div>`;
+  el.querySelectorAll("[data-m]").forEach((c) => (c.onclick = () => { ui.rmode = c.dataset.m; render(); }));
+  const rv = $("#rv", el);
+  if (ui.rmode === "cards") return vCards(C, rv);
+  rv.innerHTML = C.sections.map((s) => `
+    <section class="glass">
+      <button class="sec-head" data-sec="${s.id}" aria-expanded="${!!ui.open[s.id]}"><div class="row"><span class="badge cy">${s.tag}</span><h3>${s.title}</h3></div><span class="row">${S.reviewed[s.id] ? '<span class="badge ok">done</span>' : ""}<span class="muted" style="font-size:20px">${ui.open[s.id] ? "−" : "+"}</span></span></button>
+      ${ui.open[s.id] ? `<div class="sec-body">${s.html}
+        ${s.figs.map((f) => { const F = C.figures.find((x) => x.id === f); return `<div class="stack" style="gap:6px"><div class="fig-box">${FIG[F.draw]()}</div><p class="small muted">${F.title}</p></div>`; }).join("")}
+        <div class="row"><button class="btn done-btn ${S.reviewed[s.id] ? "on" : ""}" data-done="${s.id}">${S.reviewed[s.id] ? "✓ Reviewed" : "Mark as reviewed"}</button><button class="btn" data-quiz="${s.id}">Quick test on this section</button></div>
+      </div>` : ""}
+    </section>`).join("");
+  rv.querySelectorAll("[data-sec]").forEach((b) => (b.onclick = () => { ui.open[b.dataset.sec] = !ui.open[b.dataset.sec]; render(); }));
+  rv.querySelectorAll("[data-done]").forEach((b) => (b.onclick = () => { const k = b.dataset.done; S.reviewed[k] = !S.reviewed[k]; save(); toast(S.reviewed[k] ? "Marked as reviewed" : "Unmarked"); render(); }));
+  rv.querySelectorAll("[data-quiz]").forEach((b) => (b.onclick = () => {
+    const s = b.dataset.quiz, topics = s === "s22" ? ["s22", "fig"] : [s];
+    startTest(C, C.questions.filter((q) => topics.includes(q.t)), "practice", false);
+  }));
+}
+function vCards(C, el) {
+  const n = C.flashcards.length, i = ((ui.fc % n) + n) % n, [f, b] = C.flashcards[i], key = C.id + ":" + i;
+  const known = C.flashcards.filter((x, j) => S.known[C.id + ":" + j]).length;
+  el.innerHTML = `
+    <div class="progress"><i style="width:${pct(known, n)}%"></i></div>
+    <p class="small muted mono">Card ${i + 1}/${n} · ${known} known</p>
+    <div class="flash ${ui.flip ? "flip" : ""}" id="fl" role="button" tabindex="0" aria-label="Flip card"><div class="flash-in"><div class="face front">${esc(f)}<span class="small muted" style="font-family:var(--font-b);font-weight:500;margin-top:10px">tap to flip</span></div><div class="face back">${esc(b)}</div></div></div>
+    <div class="row" style="justify-content:center"><button class="btn" id="pv">‹ Prev</button><button class="btn ${S.known[key] ? "done-btn on" : ""}" id="kn">${S.known[key] ? "✓ Known" : "I know this"}</button><button class="btn primary" id="nx">Next ›</button></div>`;
+  $("#fl", el).onclick = () => { ui.flip = !ui.flip; $("#fl", el).classList.toggle("flip", ui.flip); };
+  $("#pv", el).onclick = () => { ui.fc--; ui.flip = false; vCards(C, el); };
+  $("#nx", el).onclick = () => { ui.fc++; ui.flip = false; vCards(C, el); };
+  $("#kn", el).onclick = () => { S.known[key] = !S.known[key]; save(); if (S.known[key]) { ui.fc++; ui.flip = false; } vCards(C, el); };
+}
+
+/* ---------- Test setup ---------- */
+const setup = { n: 20, mode: "exam", timer: true, topics: null };
+function vTestSetup(C, el) {
+  if (!setup.topics) setup.topics = new Set(Object.keys(C.topics));
+  const pool = C.questions.filter((q) => setup.topics.has(q.t));
+  const n = Math.min(setup.n, pool.length);
+  el.innerHTML = `
+  <section class="glass stack" style="gap:16px">
+    <div><h2 class="neon-text" style="display:inline-block">IMAT-style test</h2><p class="small muted">${C.questions.length} questions in the bank · 5 options (A–E) · one correct answer</p></div>
+    <div class="opt-group"><span class="lbl">Number of questions</span><div class="row">${[10, 15, 20].map((x) => `<button class="chip ${setup.n === x ? "on" : ""}" data-n="${x}">${x}</button>`).join("")}</div></div>
+    <div class="opt-group"><span class="lbl">Mode</span><div class="row"><button class="chip ${setup.mode === "exam" ? "on" : ""}" data-mode="exam">Exam: results at the end</button><button class="chip ${setup.mode === "practice" ? "on" : ""}" data-mode="practice">Practice: instant feedback</button></div></div>
+    <div class="opt-group"><span class="lbl">Timer · IMAT pace 100 s per question</span><div class="row"><button class="chip ${setup.timer ? "on" : ""}" data-t="1">On</button><button class="chip ${!setup.timer ? "on" : ""}" data-t="0">Off</button></div></div>
+    <div class="opt-group"><span class="lbl">Sections</span><div class="row">${Object.entries(C.topics).map(([k, v]) => `<button class="chip ${setup.topics.has(k) ? "on" : ""}" data-tp="${k}">${v} <span class="muted">${C.questions.filter((q) => q.t === k).length}</span></button>`).join("")}</div></div>
+    <button class="btn primary block" id="go" ${pool.length ? "" : "disabled"}>Start test · ${n} questions${setup.timer ? ` · ${Math.round(n * 100 / 60)} min` : ""}</button>
+  </section>
+  <section class="glass stack">
+    <h3>How IMAT scoring works</h3>
+    <div class="kpis" style="grid-template-columns:repeat(3,1fr)"><div class="kpi g"><b>+1.5</b><span>correct</span></div><div class="kpi r"><b>−0.4</b><span>wrong</span></div><div class="kpi y"><b>0</b><span>blank</span></div></div>
+    <p class="small muted">A blind guess among 5 options loses points on average (0.2 × 1.5 − 0.8 × 0.4 = −0.02). Guess only after you can rule out at least one option. Wrong and skipped questions go to Mistakes.</p>
+  </section>`;
+  el.querySelectorAll("[data-n]").forEach((c) => (c.onclick = () => { setup.n = +c.dataset.n; render(); }));
+  el.querySelectorAll("[data-mode]").forEach((c) => (c.onclick = () => { setup.mode = c.dataset.mode; render(); }));
+  el.querySelectorAll("[data-t]").forEach((c) => (c.onclick = () => { setup.timer = c.dataset.t === "1"; render(); }));
+  el.querySelectorAll("[data-tp]").forEach((c) => (c.onclick = () => { const k = c.dataset.tp; setup.topics.has(k) ? setup.topics.delete(k) : setup.topics.add(k); render(); }));
+  $("#go", el).onclick = () => startTest(C, shuffle(pool).slice(0, n), setup.mode, setup.timer);
+}
+
+function startTest(C, qs, mode, timer, fromMistakes = false) {
+  if (!qs.length) return toast("No questions here yet");
+  const items = shuffle(qs).map((q) => { const order = q.fixed ? [0, 1, 2, 3, 4] : shuffle([0, 1, 2, 3, 4]); return { q, order }; });
+  T = { ch: C.id, items, ans: items.map(() => null), cur: 0, mode, fromMistakes, done: false, end: timer ? Date.now() + items.length * 100000 : null, start: Date.now() };
+  render();
+}
+
+/* ---------- Running test ---------- */
+function renderTest() {
+  const C = getCh(T.ch), it = T.items[T.cur], q = it.q, a = T.ans[T.cur];
+  const prac = T.mode === "practice", locked = prac && a !== null;
+  $("#tabs").hidden = true;
+  $("#meta").textContent = T.fromMistakes ? "Mistakes practice" : prac ? "Practice" : "Exam";
+  const answered = T.ans.filter((x) => x !== null).length;
+  app.innerHTML = `
+  <section class="glass stack" style="gap:10px">
+    <div class="row between"><span class="mono small">Q ${T.cur + 1} / ${T.items.length}</span>${T.end ? `<span class="timer" id="tm"></span>` : ""}<button class="btn" id="quit" style="padding:7px 12px;font-size:13px">End</button></div>
+    <div class="progress"><i style="width:${pct(answered, T.items.length)}%"></i></div>
+    <div class="qnav">${T.items.map((x, i) => { const v = T.ans[i]; let c = v !== null ? "ans" : ""; if (prac && v !== null) c = x.order[v] === x.q.a ? "ok" : "bad"; return `<button class="qn ${c} ${i === T.cur ? "cur" : ""}" data-j="${i}">${i + 1}</button>`; }).join("")}</div>
+  </section>
+  <section class="glass stack" style="gap:12px">
+    <span class="badge" style="align-self:flex-start">${C.topics[q.t]}</span>
+    <div class="qtext">${esc(q.q)}</div>
+    <div class="stack" style="gap:9px">${it.order.map((oi, k) => {
+      let cls = a === k ? "sel" : "";
+      if (locked) { if (oi === q.a) cls = "right"; else if (a === k) cls = "wrong"; }
+      return `<button class="opt ${cls}" data-k="${k}" ${locked ? "disabled" : ""}><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`;
+    }).join("")}</div>
+    ${locked ? `<div class="explain"><b style="color:${it.order[a] === q.a ? "var(--lime)" : "var(--red)"}">${it.order[a] === q.a ? "Correct · +1.5" : `Wrong · −0.4 · answer ${LET[it.order.indexOf(q.a)]}`}</b><span>${esc(q.e)}</span><span class="small" style="color:var(--violet)"><b>Key note:</b> ${esc(q.tip)}</span></div>` : ""}
+    ${!prac && a !== null ? `<button class="btn" id="clr" style="align-self:flex-start;font-size:13px;padding:7px 12px">Clear answer (leave blank)</button>` : ""}
+    <div class="row between"><button class="btn" id="prev" ${T.cur ? "" : "disabled"}>‹ Prev</button>${T.cur < T.items.length - 1 ? `<button class="btn primary" id="next">Next ›</button>` : `<button class="btn primary" id="fin">Finish</button>`}</div>
+  </section>
+  <div id="confirmBox"></div>`;
+  app.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => { if (locked) return; T.ans[T.cur] = +b.dataset.k; renderTest(); }));
+  app.querySelectorAll("[data-j]").forEach((b) => (b.onclick = () => { T.cur = +b.dataset.j; renderTest(); }));
+  $("#prev").onclick = () => { T.cur--; renderTest(); };
+  if ($("#next")) $("#next").onclick = () => { T.cur++; renderTest(); };
+  if ($("#clr")) $("#clr").onclick = () => { T.ans[T.cur] = null; renderTest(); };
+  const ask = (msg) => {
+    $("#confirmBox").innerHTML = `<section class="glass confirm stack"><p>${msg}</p><div class="row"><button class="btn primary" id="yes">Finish and see results</button><button class="btn" id="no">Keep going</button></div></section>`;
+    $("#yes").onclick = finishTest; $("#no").onclick = () => ($("#confirmBox").innerHTML = "");
+    $("#confirmBox").scrollIntoView({ behavior: "smooth", block: "center" });
+  };
+  const blankN = T.ans.filter((x) => x === null).length;
+  if ($("#fin")) $("#fin").onclick = () => (blankN ? ask(`${blankN} question(s) are blank and will score 0.`) : finishTest());
+  $("#quit").onclick = () => ask(`End the test now? ${blankN} blank question(s) will score 0.`);
+  clearInterval(timerH);
+  if (T.end) {
+    const tick = () => { const s = Math.max(0, Math.round((T.end - Date.now()) / 1000)); const tm = $("#tm"); if (tm) { tm.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; tm.classList.toggle("low", s < 60); } if (!s) { clearInterval(timerH); toast("Time is up"); finishTest(); } };
+    tick(); timerH = setInterval(tick, 1000);
+  }
+}
+document.addEventListener("keydown", (e) => {
+  if (!T || T.done || e.target.closest("input,textarea")) return;
+  const k = e.key.toUpperCase(), idx = "ABCDE".indexOf(k) >= 0 ? "ABCDE".indexOf(k) : "12345".indexOf(e.key);
+  const locked = T.mode === "practice" && T.ans[T.cur] !== null;
+  if (idx >= 0 && !locked) { T.ans[T.cur] = idx; renderTest(); }
+  else if (e.key === "ArrowRight" && T.cur < T.items.length - 1) { T.cur++; renderTest(); }
+  else if (e.key === "ArrowLeft" && T.cur > 0) { T.cur--; renderTest(); }
+});
+
+function finishTest() {
+  clearInterval(timerH);
+  let c = 0, w = 0, b = 0;
+  const per = {};
+  T.items.forEach((it, i) => {
+    const v = T.ans[i], id = it.q.id, st = (S.qs[id] = S.qs[id] || { c: 0, w: 0 });
+    per[it.q.t] = per[it.q.t] || [0, 0]; per[it.q.t][1]++;
+    if (v === null) { b++; S.mistakes[id] = { kind: "blank", at: Date.now() }; }
+    else if (it.order[v] === it.q.a) { c++; st.c++; per[it.q.t][0]++; if (T.fromMistakes) delete S.mistakes[id]; }
+    else { w++; st.w++; S.mistakes[id] = { kind: "wrong", at: Date.now() }; }
+  });
+  const score = c * 1.5 - w * 0.4, max = T.items.length * 1.5;
+  T.res = { c, w, b, score, max, per, secs: Math.round((Date.now() - T.start) / 1000) };
+  if (!T.fromMistakes) S.tests.push({ ch: T.ch, at: Date.now(), n: T.items.length, c, w, b, score, max, per });
+  save();
+  T.done = true; ui.rfilter = "wrong";
+  render();
+}
+
+function qCard(it, v, num) {
+  const q = it.q, mine = v === null ? null : it.order[v];
+  return `<div class="list-item">
+    <div class="row between"><span class="badge">${num ? "Q" + num + " · " : ""}${getCh(T ? T.ch : ui.ch).topics[q.t]}</span>${mine === null ? '<span class="badge" style="color:var(--amber);border-color:rgba(255,209,102,.4);background:rgba(255,209,102,.1)">blank</span>' : mine === q.a ? '<span class="badge ok">correct</span>' : '<span class="badge pk">wrong</span>'}</div>
+    <div class="qtext" style="font-size:15.5px">${esc(q.q)}</div>
+    ${mine !== null && mine !== q.a ? `<p class="small" style="color:var(--red)">Your answer: ${esc(q.o[mine])}</p>` : ""}
+    <p class="small" style="color:var(--lime)">Correct: ${esc(q.o[q.a])}</p>
+    <div class="explain"><span>${esc(q.e)}</span><span class="small" style="color:var(--violet)"><b>Key note:</b> ${esc(q.tip)}</span></div>
+  </div>`;
+}
+function renderResults() {
+  const C = getCh(T.ch), R = T.res, p = Math.max(0, pct(R.score, R.max)), r = 70, circ = 2 * Math.PI * r;
+  $("#tabs").hidden = true; $("#meta").textContent = "Results";
+  const list = T.items.map((it, i) => ({ it, v: T.ans[i], i })).filter((x) => ui.rfilter === "all" || x.v === null || x.it.order[x.v] !== x.it.q.a);
+  app.innerHTML = `
+  <section class="glass stack" style="align-items:center;text-align:center;gap:12px">
+    <h2>${T.fromMistakes ? "Mistakes practice done" : "Test complete"}</h2>
+    <div class="score-ring"><svg viewBox="0 0 170 170"><circle cx="85" cy="85" r="${r}" stroke="rgba(255,255,255,.08)"/><circle cx="85" cy="85" r="${r}" stroke="url(#sg)" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - p / 100)}" style="filter:drop-shadow(0 0 8px #35f2e0)"/><defs><linearGradient id="sg"><stop offset="0" stop-color="#35f2e0"/><stop offset="1" stop-color="#ff5fd2"/></linearGradient></defs></svg>
+      <div class="val"><b>${R.score.toFixed(1)}</b><span class="small muted">of ${R.max.toFixed(1)}</span></div></div>
+    <p class="muted small">${p >= 80 ? "Excellent. These pages are under control." : p >= 55 ? "Good. Review the key notes below to close the gaps." : "Go back to Review and Figures, then try again."} · ${Math.floor(R.secs / 60)}m ${R.secs % 60}s</p>
+    <div class="kpis" style="width:100%"><div class="kpi g"><b>${R.c}</b><span>correct</span></div><div class="kpi r"><b>${R.w}</b><span>wrong</span></div><div class="kpi y"><b>${R.b}</b><span>blank</span></div><div class="kpi c"><b>${pct(R.c, T.items.length)}%</b><span>accuracy</span></div></div>
+  </section>
+  <section class="glass stack"><h3>By section</h3>${Object.entries(R.per).map(([k, [a, t]]) => `<div class="bar-row"><div class="row between small"><span>${C.topics[k]}</span><span class="mono muted">${a}/${t}</span></div><div class="progress"><i style="width:${pct(a, t)}%"></i></div></div>`).join("")}</section>
+  <div class="row"><button class="btn primary" id="again">New test</button><button class="btn" id="tomist">Go to Mistakes</button><button class="btn" id="out">Back to chapter</button></div>
+  <section class="stack"><div class="row"><button class="chip ${ui.rfilter === "wrong" ? "on" : ""}" data-rf="wrong">Wrong &amp; blank</button><button class="chip ${ui.rfilter === "all" ? "on" : ""}" data-rf="all">All questions</button></div>
+    ${list.length ? list.map((x) => qCard(x.it, x.v, x.i + 1)).join("") : `<div class="glass empty"><p>No mistakes in this test.</p></div>`}</section>`;
+  app.querySelectorAll("[data-rf]").forEach((c) => (c.onclick = () => { ui.rfilter = c.dataset.rf; renderResults(); }));
+  $("#again").onclick = () => { T = null; ui.tab = "test"; render(); };
+  $("#tomist").onclick = () => { T = null; ui.tab = "mistakes"; render(); };
+  $("#out").onclick = () => { T = null; ui.tab = "review"; render(); };
+}
+
+/* ---------- Figures ---------- */
+function vFigures(C, el) {
+  el.innerHTML = C.figures.map((F) => `
+    <section class="glass stack" id="F-${F.id}">
+      <div class="row between"><h3>${F.title}</h3>${F.interactive ? `<div class="row"><button class="chip ${ui.fig.hide ? "on" : ""}" data-hide="1">Label quiz</button><button class="chip" data-reset="1">Reset</button></div>` : ""}</div>
+      <div class="fig-box ${F.interactive ? (ui.fig.hide ? "lab-hidden" : "") : ""}" data-fig="${F.id}">${FIG[F.draw]()}</div>
+      ${F.interactive ? `<div class="legend"><span><i style="background:rgba(167,139,250,.3);border:2px solid #a78bfa"></i>simple biological molecules</span><span><i style="background:rgba(53,242,224,.25);border:2px solid #35f2e0"></i>complex biological molecules</span></div>
+      <p class="small" id="figHint" style="color:var(--cyan)">${ui.fig.hide ? "Label quiz: say the name of each box, then tap it to check." : "Tap a box to light up its pathway."}</p>` : ""}
+      <p class="muted">${F.caption}</p>
+      <ul class="fig-points">${F.points.map((x) => `<li>${x}</li>`).join("")}</ul>
+    </section>`).join("");
+  const fb = el.querySelector('[data-fig="fig22"]');
+  if (!fb) return;
+  const svg = fb.querySelector("svg");
+  const apply = () => {
+    svg.querySelectorAll(".fnode").forEach((g) => { g.classList.toggle("shown", !!ui.fig.shown[g.dataset.n]); g.classList.remove("hl"); });
+    svg.querySelectorAll(".farrow").forEach((a) => a.classList.remove("hl"));
+    svg.classList.toggle("fig-dim", !!ui.fig.hl && !ui.fig.hide);
+    if (ui.fig.hl && !ui.fig.hide) { const [ns, as] = PATHS[ui.fig.hl]; ns.forEach((n) => svg.querySelector(`[data-n="${n}"]`).classList.add("hl")); as.forEach((a) => svg.querySelector(`[data-a="${a}"]`).classList.add("hl")); }
+  };
+  svg.querySelectorAll(".fnode").forEach((g) => {
+    const act = () => {
+      if (ui.fig.hide) { ui.fig.shown[g.dataset.n] = true; const left = 9 - Object.keys(ui.fig.shown).length; $("#figHint").textContent = left ? `${left} label(s) left` : "All labels revealed. Tap Reset to try again."; }
+      else ui.fig.hl = ui.fig.hl === g.dataset.n ? null : g.dataset.n;
+      apply();
+    };
+    g.onclick = act; g.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); act(); } };
+  });
+  el.querySelector("[data-hide]").onclick = () => { ui.fig.hide = !ui.fig.hide; ui.fig.shown = {}; ui.fig.hl = null; vFigures(C, el); };
+  el.querySelector("[data-reset]").onclick = () => { ui.fig.shown = {}; ui.fig.hl = null; vFigures(C, el); };
+  apply();
+}
+
+/* ---------- Mistakes ---------- */
+function vMistakes(C, el) {
+  const ids = Object.keys(S.mistakes).filter((id) => C.questions.some((q) => q.id === id));
+  const qs = ids.map((id) => C.questions.find((q) => q.id === id));
+  if (!qs.length) {
+    el.innerHTML = `<section class="glass empty stack" style="align-items:center"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.8 2.8L16 9.5"/></svg><h3>No mistakes saved</h3><p class="muted small">Wrong and skipped questions from your tests appear here with explanations and key notes. Answer one correctly in Mistakes practice to clear it.</p><button class="btn primary" id="gotest">Take a test</button></section>`;
+    $("#gotest", el).onclick = () => { ui.tab = "test"; render(); };
+    return;
+  }
+  const tips = [...new Set(qs.map((q) => q.tip))];
+  el.innerHTML = `
+  <section class="glass stack">
+    <div class="row between"><h3>${qs.length} question(s) to fix</h3><button class="btn primary" id="pm">Practise mistakes</button></div>
+    <p class="small muted">In practice mode you see the answer right away. Each correct answer removes that question from this list.</p>
+  </section>
+  <section class="glass stack"><h3 style="color:var(--violet)">Key notes from your mistakes</h3><ul class="fig-points">${tips.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></section>
+  ${qs.map((q) => qCard({ q, order: [0, 1, 2, 3, 4] }, S.mistakes[q.id].kind === "blank" ? null : -1, 0).replace('<p class="small" style="color:var(--red)">Your answer: undefined</p>', "")).join("")}
+  <button class="btn" id="clearAll">Clear all mistakes</button><div id="cc"></div>`;
+  $("#pm", el).onclick = () => startTest(C, qs, "practice", false, true);
+  $("#clearAll", el).onclick = () => {
+    $("#cc", el).innerHTML = `<section class="glass confirm stack"><p>Remove all ${qs.length} saved mistakes for this chapter?</p><div class="row"><button class="btn primary" id="cy">Remove all</button><button class="btn" id="cn">Cancel</button></div></section>`;
+    $("#cy", el).onclick = () => { ids.forEach((id) => delete S.mistakes[id]); save(); toast("Mistakes cleared"); render(); };
+    $("#cn", el).onclick = () => ($("#cc", el).innerHTML = "");
+  };
+}
+
+/* ---------- Progress ---------- */
+function vProgress(C, el) {
+  const tests = S.tests.filter((t) => t.ch === C.id);
+  const rev = C.sections.filter((s) => S.reviewed[s.id]).length;
+  const known = C.flashcards.filter((f, i) => S.known[C.id + ":" + i]).length;
+  const mastered = C.questions.filter((q) => (S.qs[q.id] || {}).c > 0).length;
+  const best = tests.length ? Math.max(...tests.map((t) => pct(t.score, t.max))) : 0;
+  const avg = tests.length ? Math.round(tests.reduce((a, t) => a + Math.max(0, pct(t.score, t.max)), 0) / tests.length) : 0;
+  const per = {}; Object.keys(C.topics).forEach((k) => (per[k] = [0, 0]));
+  C.questions.forEach((q) => { const s = S.qs[q.id]; if (s) { per[q.t][0] += s.c; per[q.t][1] += s.c + s.w; } });
+  const last = tests.slice(-10);
+  const W = 640, H = 170, bw = 40, gap = last.length ? (W - 40) / last.length : 0;
+  const chart = last.length ? `<div class="fig-box narrow" style="padding:8px"><svg viewBox="0 0 ${W} ${H + 30}" role="img" aria-label="Recent test scores">
+    ${[0, 50, 100].map((v) => `<line x1="30" x2="${W}" y1="${H - (v / 100) * (H - 20)}" y2="${H - (v / 100) * (H - 20)}" stroke="rgba(140,160,255,.15)"/><text x="24" y="${H - (v / 100) * (H - 20) + 4}" fill="#98a0c8" font-size="11" text-anchor="end" font-family="JetBrains Mono,monospace">${v}</text>`).join("")}
+    ${last.map((t, i) => { const v = Math.max(0, pct(t.score, t.max)), h = (v / 100) * (H - 20), x = 40 + i * gap + (gap - bw) / 2; return `<rect x="${x}" y="${H - h}" width="${bw}" height="${Math.max(h, 2)}" rx="8" fill="${i === last.length - 1 ? "#35f2e0" : "rgba(167,139,250,.55)"}" ${i === last.length - 1 ? 'filter="url(#pg)"' : ""}/><text x="${x + bw / 2}" y="${H - h - 6}" text-anchor="middle" fill="#e9edff" font-size="11.5" font-family="JetBrains Mono,monospace">${v}%</text><text x="${x + bw / 2}" y="${H + 18}" text-anchor="middle" fill="#98a0c8" font-size="11" font-family="JetBrains Mono,monospace">#${tests.length - last.length + i + 1}</text>`; }).join("")}
+    <defs><filter id="pg"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs></svg></div>` : `<p class="small muted">Take a test to see your score chart.</p>`;
+  el.innerHTML = `
+  <section class="glass stack" style="align-items:center;text-align:center">
+    ${ring(mastery(C), 120)}
+    <h3>Chapter mastery</h3><p class="small muted">30% notes reviewed · 20% flashcards known · 50% questions answered correctly at least once</p>
+  </section>
+  <section class="glass stack">
+    <div class="bar-row"><div class="row between small"><span>Notes reviewed</span><span class="mono muted">${rev}/${C.sections.length}</span></div><div class="progress"><i style="width:${pct(rev, C.sections.length)}%"></i></div></div>
+    <div class="bar-row"><div class="row between small"><span>Flashcards known</span><span class="mono muted">${known}/${C.flashcards.length}</span></div><div class="progress"><i style="width:${pct(known, C.flashcards.length)}%"></i></div></div>
+    <div class="bar-row"><div class="row between small"><span>Questions mastered</span><span class="mono muted">${mastered}/${C.questions.length}</span></div><div class="progress"><i style="width:${pct(mastered, C.questions.length)}%"></i></div></div>
+  </section>
+  <section class="glass stack"><h3>Tests</h3>
+    <div class="kpis"><div class="kpi c"><b>${tests.length}</b><span>tests taken</span></div><div class="kpi g"><b>${best}%</b><span>best score</span></div><div class="kpi y"><b>${avg}%</b><span>average</span></div></div>
+    ${chart}
+  </section>
+  <section class="glass stack"><h3>Accuracy by section</h3>
+    ${Object.entries(C.topics).map(([k, v]) => `<div class="bar-row"><div class="row between small"><span>${v}</span><span class="mono muted">${per[k][1] ? pct(per[k][0], per[k][1]) + "%" : "not tried"}</span></div><div class="progress"><i style="width:${pct(per[k][0], per[k][1])}%"></i></div></div>`).join("")}
+  </section>
+  ${tests.length ? `<section class="glass stack"><h3>History</h3>${tests.slice().reverse().slice(0, 12).map((t) => `<div class="row between small" style="border-bottom:1px solid var(--line);padding-bottom:8px"><span class="mono muted">${new Date(t.at).toLocaleDateString()} ${new Date(t.at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span><span>${t.n} Q · <b style="color:var(--lime)">${t.c}</b>/<b style="color:var(--red)">${t.w}</b>/<b style="color:var(--amber)">${t.b}</b></span><span class="mono" style="color:var(--cyan)">${t.score.toFixed(1)} / ${t.max.toFixed(1)}</span></div>`).join("")}</section>` : ""}
+  <section class="glass stack"><p class="small muted">Progress is saved in this browser on this device.</p><button class="btn" id="reset" style="align-self:flex-start">Reset chapter progress</button><div id="rc"></div></section>`;
+  $("#reset", el).onclick = () => {
+    $("#rc", el).innerHTML = `<div class="row"><button class="btn primary" id="ry">Yes, reset everything</button><button class="btn" id="rn">Cancel</button></div>`;
+    $("#ry", el).onclick = () => {
+      C.sections.forEach((s) => delete S.reviewed[s.id]); C.flashcards.forEach((f, i) => delete S.known[C.id + ":" + i]);
+      C.questions.forEach((q) => { delete S.qs[q.id]; delete S.mistakes[q.id]; }); S.tests = S.tests.filter((t) => t.ch !== C.id);
+      save(); toast("Progress reset"); render();
+    };
+    $("#rn", el).onclick = () => ($("#rc", el).innerHTML = "");
+  };
+}
+
+$("#home").onclick = () => { if (T && !T.done) return toast("Finish or end the test first"); T = null; ui.ch = null; render(); };
+render();
+</script>
+</body></html>
