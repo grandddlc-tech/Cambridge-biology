@@ -680,15 +680,15 @@ function vRecall(C, el) {
   el.innerHTML = `
   <section class="glass stack">
     <div class="row between"><h2 class="neon-text" style="display:inline-block">Active recall</h2>${due.length ? `<span class="status due">${due.length} due</span>` : `<span class="status wait">Nothing due</span>`}</div>
-    <p class="small muted">Test yourself on one section with no notes. The app then tells you when to come back. Score <b style="color:var(--lime)">80%+</b> to move up a step, <b style="color:var(--amber)">60–79%</b> repeats the same gap, <b style="color:var(--red)">under 60%</b> starts again tomorrow.</p>
+    <p class="small muted">Test yourself on one section with no notes, in real IMAT conditions: one clock for the whole test, answers and score only at the end (+1.5 / −0.4 / 0). The app then tells you when to come back. Score <b style="color:var(--lime)">80%+</b> to move up a step, <b style="color:var(--amber)">60–79%</b> repeats the same gap, <b style="color:var(--red)">under 60%</b> starts again tomorrow.</p>
     <div class="row small mono muted" style="gap:6px">${IV.map((d, i) => `<span class="badge ${i === 5 ? "ok" : "cy"}">${STEP_NAMES[i + 1]}</span>`).join('<span>›</span>')}</div>
-    <div class="opt-group"><span class="lbl">Timer · ${QSEC} s per question (no answer = wrong)</span><div class="row"><button class="chip ${S.recallTimed ? "on" : ""}" data-rt="1">On</button><button class="chip ${!S.recallTimed ? "on" : ""}" data-rt="0">Off</button></div></div>
+    <div class="opt-group"><span class="lbl">IMAT timer · 100 s per question for the whole test</span><div class="row"><button class="chip ${S.recallTimed ? "on" : ""}" data-rt="1">On</button><button class="chip ${!S.recallTimed ? "on" : ""}" data-rt="0">Off</button></div></div>
   </section>
   ${keys.map((k) => {
     const d = deckOf(C, k), n = C.questions.filter((q) => q.t === k).length, last = (d.hist || []).slice(-1)[0];
     return `<section class="glass deck ${isDue(d) ? "due" : ""}">
       <div class="row between"><h3>${C.topics[k]}</h3>${deckStatus(d)}</div>
-      <div class="row between small"><span class="row">${steps(d.stage)}<span class="muted">${d.stage ? "Step " + d.stage + "/6 · gap " + STEP_NAMES[d.stage] : "Not started"}</span></span><span class="muted mono">${n} Q${last ? ` · last ${last.pct}%` : ""}</span></div>
+      <div class="row between small"><span class="row">${steps(d.stage)}<span class="muted">${d.stage ? "Step " + d.stage + "/6 · gap " + STEP_NAMES[d.stage] : "Not started"}</span></span><span class="muted mono">${n} Q · ${Math.floor(n * 100 / 60)}:${String(n * 100 % 60).padStart(2, "0")}${last ? ` · last ${last.pct}%` : ""}</span></div>
       <button class="btn ${!d.last || isDue(d) ? "primary" : ""} block" data-rc="${k}">${!d.last ? "Start first recall" : isDue(d) ? "Start recall now" : "Practise early"}</button>
       ${d.last && !isDue(d) ? `<p class="small muted">Practising early keeps your schedule. Only a score under 60% resets it.</p>` : ""}
     </section>`;
@@ -696,7 +696,7 @@ function vRecall(C, el) {
   <section class="glass stack"><h3>Next 14 days</h3><div class="cal">${cal.slice(0, 7).join("")}</div><div class="cal">${cal.slice(7).join("")}</div><p class="small muted">Pink numbers = sections due that day. Come back on those days to keep the memory fresh.</p></section>
   ${log.length ? `<section class="glass stack"><h3>Recent recall sessions</h3>${log.map((x) => `<div class="row between small" style="border-bottom:1px solid var(--line);padding-bottom:8px"><span class="mono muted">${new Date(x.at).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</span><span>${C.topics[x.deck]}</span><span class="mono" style="color:${x.pct >= 80 ? "var(--lime)" : x.pct >= 60 ? "var(--amber)" : "var(--red)"}">${x.pct}%</span></div>`).join("")}</section>` : ""}`;
   el.querySelectorAll("[data-rt]").forEach((c) => (c.onclick = () => { S.recallTimed = c.dataset.rt === "1"; save(); render(); }));
-  el.querySelectorAll("[data-rc]").forEach((b) => (b.onclick = () => { const k = b.dataset.rc; startTest(C, C.questions.filter((q) => q.t === k), "practice", false, false, k); }));
+  el.querySelectorAll("[data-rc]").forEach((b) => (b.onclick = () => { const k = b.dataset.rc; startTest(C, C.questions.filter((q) => q.t === k), "exam", S.recallTimed !== false, false, k); }));
 }
 
 /* ---------- Test setup ---------- */
@@ -729,7 +729,7 @@ function vTestSetup(C, el) {
 function startTest(C, qs, mode, timer, fromMistakes = false, recall = null) {
   if (!qs.length) return toast("No questions here yet");
   const items = shuffle(qs).map((q) => { const order = q.fixed ? [0, 1, 2, 3, 4] : shuffle([0, 1, 2, 3, 4]); return { q, order }; });
-  T = { ch: C.id, items, ans: items.map(() => null), cur: 0, mode, fromMistakes, done: false, end: timer ? Date.now() + items.length * 100000 : null, start: Date.now(), recall, qTimed: !!recall && S.recallTimed !== false, qEnds: {} };
+  T = { ch: C.id, items, ans: items.map(() => null), cur: 0, mode, fromMistakes, done: false, end: timer ? Date.now() + items.length * 100000 : null, start: Date.now(), recall, qTimed: false, qEnds: {} };
   render();
 }
 

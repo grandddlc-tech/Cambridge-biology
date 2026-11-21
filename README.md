@@ -19,7 +19,7 @@ It is plain HTML, CSS and JS with no build step. It works offline and can be ins
 - New drawings go in `js/figures.js`. Bump `VERSION` in `sw.js` after changes.
 
 ## NeonBio IMAT (new app, `neon/`)
-A separate single-file app with only Chapter 2, pages 2.1–2.2 and Fig 2.2: review, flashcards, **Recall** (active recall with spaced repetition: 1 day → 3 days → 1 week → 2 weeks → 1 month → 2 months, 45 s per question), 20 IMAT-style questions, figures, mistakes and progress.
+A separate single-file app with only Chapter 2, pages 2.1–2.2 and Fig 2.2: review, flashcards, **Recall** (active recall with spaced repetition: 1 day → 3 days → 1 week → 2 weeks → 1 month → 2 months) under real IMAT timing (100 s per question for the whole test, results at the end), 20 IMAT-style questions, figures, mistakes and progress.
 APK: https://github.com/grandddlc-tech/Cambridge-biology/releases/latest/download/NeonBio.apk (installs next to BioGlow as its own app).
 
 ## Android app (APK)
