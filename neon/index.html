@@ -95,8 +95,8 @@ p { margin: 0; }
 .ch-head { display: flex; gap: 12px; align-items: flex-start; }
 .back { width: 40px; height: 40px; flex: none; border-radius: 12px; border: 1px solid var(--line); background: rgba(255, 255, 255, .04); color: var(--fg); cursor: pointer; font-size: 18px; }
 nav.tabs { position: fixed; z-index: 6; left: 0; right: 0; bottom: 0; padding: 8px max(12px, env(safe-area-inset-right, 0px)) calc(10px + env(safe-area-inset-bottom, 0px)) max(12px, env(safe-area-inset-left, 0px)); display: flex; justify-content: center; }
-nav.tabs .bar { display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; width: 100%; max-width: 560px; padding: 6px; border-radius: 22px; background: rgba(13, 18, 38, .88); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
-.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 2px; border-radius: 16px; border: 0; background: none; color: var(--muted); font-family: var(--font-b); font-size: 11.5px; font-weight: 600; cursor: pointer; position: relative; }
+nav.tabs .bar { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; width: 100%; max-width: 620px; padding: 6px; border-radius: 22px; background: rgba(13, 18, 38, .88); border: 1px solid var(--line); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); box-shadow: 0 10px 40px rgba(0, 0, 0, .5); }
+.tab { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 7px 2px; border-radius: 16px; border: 0; background: none; color: var(--muted); font-family: var(--font-b); font-size: 11px; font-weight: 600; cursor: pointer; position: relative; min-width: 0; }
 .tab svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .tab.on { color: var(--cyan); background: rgba(53, 242, 224, .09); }
 .tab.on svg { filter: drop-shadow(0 0 6px var(--cyan)); }
@@ -201,6 +201,27 @@ svg text { font-family: var(--font-b); }
 .toast { position: fixed; left: 50%; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; z-index: 20; padding: 10px 18px; border-radius: 14px; background: rgba(13, 18, 38, .95); border: 1px solid var(--cyan); color: var(--fg); box-shadow: 0 0 20px rgba(53, 242, 224, .4); font-weight: 600; font-size: 14px; transition: .3s; pointer-events: none; max-width: calc(100% - 32px); }
 .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .confirm { border-color: rgba(255, 107, 139, .5); }
+.steps { display: flex; gap: 5px; align-items: center; }
+.steps i { width: 22px; height: 7px; border-radius: 4px; background: rgba(255, 255, 255, .09); }
+.steps i.on { background: linear-gradient(90deg, var(--cyan), var(--violet)); box-shadow: 0 0 8px rgba(53, 242, 224, .55); }
+.steps i.gold { background: var(--lime); box-shadow: 0 0 8px rgba(157, 255, 122, .6); }
+.deck { display: flex; flex-direction: column; gap: 10px; }
+.deck.due { border-color: rgba(255, 95, 210, .55); box-shadow: 0 0 24px rgba(255, 95, 210, .18); }
+.status { font-family: var(--font-m); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 9px; border: 1px solid; }
+.status.due { color: var(--pink); border-color: rgba(255, 95, 210, .5); background: rgba(255, 95, 210, .1); animation: pulse 1.8s ease-in-out infinite; }
+.status.new { color: var(--amber); border-color: rgba(255, 209, 102, .45); background: rgba(255, 209, 102, .08); }
+.status.wait { color: var(--cyan); border-color: rgba(53, 242, 224, .4); background: rgba(53, 242, 224, .07); }
+.status.gold { color: var(--lime); border-color: rgba(157, 255, 122, .45); background: rgba(157, 255, 122, .08); }
+@keyframes pulse { 50% { box-shadow: 0 0 14px rgba(255, 95, 210, .55); } }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.cal div { border-radius: 12px; border: 1px solid var(--line); padding: 6px 2px; text-align: center; font-size: 11px; color: var(--muted); display: flex; flex-direction: column; gap: 2px; align-items: center; min-height: 64px; }
+.cal div b { font-family: var(--font-d); font-size: 15px; color: var(--fg); }
+.cal div.today { border-color: var(--cyan); box-shadow: 0 0 12px rgba(53, 242, 224, .3); }
+.cal div em { font-style: normal; font-family: var(--font-m); font-size: 10px; font-weight: 700; color: #1a0016; background: var(--pink); border-radius: 6px; padding: 0 5px; box-shadow: 0 0 8px var(--pink); }
+.next-card { text-align: center; align-items: center; border-color: rgba(53, 242, 224, .5); box-shadow: 0 0 30px rgba(53, 242, 224, .18); }
+.next-card .when { font-family: var(--font-d); font-size: 26px; font-weight: 800; }
+.qtimer { height: 5px; border-radius: 3px; background: rgba(255, 255, 255, .07); overflow: hidden; }
+.qtimer i { display: block; height: 100%; background: linear-gradient(90deg, var(--lime), var(--amber), var(--red)); transition: width 1s linear; }
 @media (max-width: 440px) { .qtext { font-size: 16px; } .glass { padding: 15px; border-radius: 18px; } }
 </style>
 
@@ -544,6 +565,7 @@ function renderHome() {
     <h1 style="margin-top:12px">Biology that <span class="neon-text">glows</span>.</h1>
     <p class="muted">Pick a chapter. Each one has Review notes, an IMAT-style Test, Figures, your Mistakes and your Progress. New pages are added as you study them.</p>
   </section>
+  ${(() => { const d = CHAPTERS.filter((c) => !c.locked).flatMap((c) => dueDecks(c).map((k) => [c, k])); return d.length ? `<button class="glass deck due" id="dueGo" style="text-align:left;color:var(--fg);font:inherit;cursor:pointer"><div class="row between"><h3>Recall due today</h3><span class="status due">${d.length} due</span></div><p class="small muted">${d.map(([c, k]) => c.topics[k]).join(" · ")}. Test yourself now to lock it in.</p></button>` : ""; })()}
   <h3 style="margin-top:4px">Choose a chapter</h3>
   <div class="stack">
     ${CHAPTERS.map((c) => c.locked
@@ -551,6 +573,7 @@ function renderHome() {
       : `<button class="glass ch-card" data-ch="${c.id}"><span class="ch-num">${c.id}</span><div style="min-width:0"><h3>${c.title}</h3><p class="small muted">${c.pages}</p><p class="small" style="margin-top:4px;color:var(--cyan)">${c.questions.length} questions · ${c.figures.length} figures · ${c.flashcards.length} flashcards</p></div>${ring(mastery(c))}</button>`).join("")}
   </div>`;
   app.querySelectorAll("[data-ch]").forEach((b) => (b.onclick = () => { ui.ch = +b.dataset.ch; ui.tab = "review"; render(); }));
+  if ($("#dueGo")) $("#dueGo").onclick = () => { ui.ch = CHAPTERS.find((c) => !c.locked && dueDecks(c).length).id; ui.tab = "recall"; render(); };
 }
 
 const ICONS = {
@@ -558,18 +581,20 @@ const ICONS = {
   test: '<rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 12l3 3 5-6"/>',
   figures: '<circle cx="8" cy="8" r="3.2"/><circle cx="16.5" cy="16" r="3.2"/><path d="M10.3 10.2l4 3.6"/><rect x="3" y="3" width="18" height="18" rx="4"/>',
   mistakes: '<path d="M12 3l9.5 17h-19z"/><path d="M12 10v4M12 17.3v.2"/>',
-  progress: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'
+  progress: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  recall: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5M19 5l1.5 1.5"/>'
 };
 function renderChapter() {
   const C = getCh(ui.ch);
   $("#meta").textContent = `Ch ${C.id} · ${mastery(C)}%`;
   const nm = Object.keys(S.mistakes).filter((id) => C.questions.some((q) => q.id === id)).length;
+  const dueN = dueDecks(C).length;
   $("#tabs").hidden = false;
-  $("#tabbar").innerHTML = ["review", "test", "figures", "mistakes", "progress"].map((t) => `<button class="tab ${ui.tab === t ? "on" : ""}" data-tab="${t}"><svg viewBox="0 0 24 24">${ICONS[t]}</svg>${t[0].toUpperCase() + t.slice(1)}${t === "mistakes" && nm ? `<span class="dot">${nm}</span>` : ""}</button>`).join("");
+  $("#tabbar").innerHTML = ["review", "recall", "test", "figures", "mistakes", "progress"].map((t) => `<button class="tab ${ui.tab === t ? "on" : ""}" data-tab="${t}"><svg viewBox="0 0 24 24">${ICONS[t]}</svg>${t[0].toUpperCase() + t.slice(1)}${t === "mistakes" && nm ? `<span class="dot">${nm}</span>` : ""}${t === "recall" && dueN ? `<span class="dot">${dueN}</span>` : ""}</button>`).join("");
   $("#tabbar").querySelectorAll("[data-tab]").forEach((b) => (b.onclick = () => { ui.tab = b.dataset.tab; render(); }));
   app.innerHTML = `<div class="ch-head"><button class="back" id="back" aria-label="Back to chapters">‹</button><div style="min-width:0"><h2>${C.title}</h2><p class="small muted">Chapter ${C.id} · ${C.pages}</p></div></div><div id="view" class="stack" style="gap:14px"></div>`;
   $("#back").onclick = () => { ui.ch = null; render(); };
-  ({ review: vReview, test: vTestSetup, figures: vFigures, mistakes: vMistakes, progress: vProgress })[ui.tab](C, $("#view"));
+  ({ review: vReview, recall: vRecall, test: vTestSetup, figures: vFigures, mistakes: vMistakes, progress: vProgress })[ui.tab](C, $("#view"));
 }
 
 /* ---------- Review ---------- */
@@ -608,6 +633,72 @@ function vCards(C, el) {
   $("#kn", el).onclick = () => { S.known[key] = !S.known[key]; save(); if (S.known[key]) { ui.fc++; ui.flip = false; } vCards(C, el); };
 }
 
+/* ---------- Recall (active recall + spaced repetition) ---------- */
+const DAY = 86400000, IV = [1, 3, 7, 14, 30, 60], QSEC = 45;
+const STEP_NAMES = ["New", "1 day", "3 days", "1 week", "2 weeks", "1 month", "2 months"];
+const dayStart = (t) => { const d = new Date(t); d.setHours(0, 0, 0, 0); return d.getTime(); };
+const deckKey = (C, k) => C.id + ":" + k;
+const deckOf = (C, k) => (S.srs || {})[deckKey(C, k)] || { stage: 0, next: 0, last: 0, hist: [] };
+const isDue = (d) => d.last && Date.now() >= d.next;
+const dueDecks = (C) => C.locked ? [] : Object.keys(C.topics).filter((k) => isDue(deckOf(C, k)));
+function whenText(t) {
+  const n = Math.round((dayStart(t) - dayStart(Date.now())) / DAY);
+  const date = new Date(t).toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+  return n <= 0 ? "Today" : n === 1 ? `Tomorrow · ${date}` : `In ${n} days · ${date}`;
+}
+function steps(stage) { return `<span class="steps" aria-label="Step ${stage} of 6">${[1, 2, 3, 4, 5, 6].map((i) => `<i class="${i <= stage ? (stage === 6 ? "gold" : "on") : ""}"></i>`).join("")}</span>`; }
+function deckStatus(d) {
+  if (!d.last) return `<span class="status new">New</span>`;
+  if (isDue(d)) return `<span class="status due">Due now</span>`;
+  if (d.stage === 6) return `<span class="status gold">Locked in · next ${whenText(d.next)}</span>`;
+  return `<span class="status wait">${whenText(d.next)}</span>`;
+}
+/* pct >= 80 moves up a step; 60–79 repeats the same gap; below 60 restarts at 1 day.
+   Practising early never moves you up, but a score under 60 still resets the deck. */
+function schedule(C, k, pct) {
+  S.srs = S.srs || {};
+  const d = deckOf(C, k), early = d.last && !isDue(d), before = d.stage;
+  let stage = d.stage, days, kept = false;
+  if (pct < 60) { stage = 0; days = 1; }
+  else if (early) kept = true;
+  else if (pct >= 80) { stage = Math.min(stage + 1, 6); days = IV[stage - 1]; }
+  else days = IV[Math.max(stage - 1, 0)];
+  const nd = { stage, next: kept ? d.next : dayStart(Date.now()) + days * DAY, last: Date.now(), hist: (d.hist || []).concat([{ at: Date.now(), pct }]).slice(-20) };
+  S.srs[deckKey(C, k)] = nd;
+  return { before, after: stage, next: nd.next, kept, early, pct, days };
+}
+function vRecall(C, el) {
+  if (S.recallTimed === undefined) S.recallTimed = true;
+  const keys = Object.keys(C.topics), due = dueDecks(C);
+  const today = dayStart(Date.now());
+  const cal = Array.from({ length: 14 }, (_, i) => {
+    const t = today + i * DAY, n = keys.filter((k) => { const d = deckOf(C, k); return d.last && (i === 0 ? d.next <= t + DAY - 1 : dayStart(d.next) === t); }).length;
+    const dt = new Date(t);
+    return `<div class="${i ? "" : "today"}"><span>${dt.toLocaleDateString(undefined, { weekday: "short" })}</span><b>${dt.getDate()}</b>${n ? `<em>${n}</em>` : ""}</div>`;
+  });
+  const log = (S.recallLog || []).filter((x) => x.ch === C.id).slice(-8).reverse();
+  el.innerHTML = `
+  <section class="glass stack">
+    <div class="row between"><h2 class="neon-text" style="display:inline-block">Active recall</h2>${due.length ? `<span class="status due">${due.length} due</span>` : `<span class="status wait">Nothing due</span>`}</div>
+    <p class="small muted">Test yourself on one section with no notes. The app then tells you when to come back. Score <b style="color:var(--lime)">80%+</b> to move up a step, <b style="color:var(--amber)">60–79%</b> repeats the same gap, <b style="color:var(--red)">under 60%</b> starts again tomorrow.</p>
+    <div class="row small mono muted" style="gap:6px">${IV.map((d, i) => `<span class="badge ${i === 5 ? "ok" : "cy"}">${STEP_NAMES[i + 1]}</span>`).join('<span>›</span>')}</div>
+    <div class="opt-group"><span class="lbl">Timer · ${QSEC} s per question (no answer = wrong)</span><div class="row"><button class="chip ${S.recallTimed ? "on" : ""}" data-rt="1">On</button><button class="chip ${!S.recallTimed ? "on" : ""}" data-rt="0">Off</button></div></div>
+  </section>
+  ${keys.map((k) => {
+    const d = deckOf(C, k), n = C.questions.filter((q) => q.t === k).length, last = (d.hist || []).slice(-1)[0];
+    return `<section class="glass deck ${isDue(d) ? "due" : ""}">
+      <div class="row between"><h3>${C.topics[k]}</h3>${deckStatus(d)}</div>
+      <div class="row between small"><span class="row">${steps(d.stage)}<span class="muted">${d.stage ? "Step " + d.stage + "/6 · gap " + STEP_NAMES[d.stage] : "Not started"}</span></span><span class="muted mono">${n} Q${last ? ` · last ${last.pct}%` : ""}</span></div>
+      <button class="btn ${!d.last || isDue(d) ? "primary" : ""} block" data-rc="${k}">${!d.last ? "Start first recall" : isDue(d) ? "Start recall now" : "Practise early"}</button>
+      ${d.last && !isDue(d) ? `<p class="small muted">Practising early keeps your schedule. Only a score under 60% resets it.</p>` : ""}
+    </section>`;
+  }).join("")}
+  <section class="glass stack"><h3>Next 14 days</h3><div class="cal">${cal.slice(0, 7).join("")}</div><div class="cal">${cal.slice(7).join("")}</div><p class="small muted">Pink numbers = sections due that day. Come back on those days to keep the memory fresh.</p></section>
+  ${log.length ? `<section class="glass stack"><h3>Recent recall sessions</h3>${log.map((x) => `<div class="row between small" style="border-bottom:1px solid var(--line);padding-bottom:8px"><span class="mono muted">${new Date(x.at).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</span><span>${C.topics[x.deck]}</span><span class="mono" style="color:${x.pct >= 80 ? "var(--lime)" : x.pct >= 60 ? "var(--amber)" : "var(--red)"}">${x.pct}%</span></div>`).join("")}</section>` : ""}`;
+  el.querySelectorAll("[data-rt]").forEach((c) => (c.onclick = () => { S.recallTimed = c.dataset.rt === "1"; save(); render(); }));
+  el.querySelectorAll("[data-rc]").forEach((b) => (b.onclick = () => { const k = b.dataset.rc; startTest(C, C.questions.filter((q) => q.t === k), "practice", false, false, k); }));
+}
+
 /* ---------- Test setup ---------- */
 const setup = { n: 20, mode: "exam", timer: true, topics: null };
 function vTestSetup(C, el) {
@@ -635,10 +726,10 @@ function vTestSetup(C, el) {
   $("#go", el).onclick = () => startTest(C, shuffle(pool).slice(0, n), setup.mode, setup.timer);
 }
 
-function startTest(C, qs, mode, timer, fromMistakes = false) {
+function startTest(C, qs, mode, timer, fromMistakes = false, recall = null) {
   if (!qs.length) return toast("No questions here yet");
   const items = shuffle(qs).map((q) => { const order = q.fixed ? [0, 1, 2, 3, 4] : shuffle([0, 1, 2, 3, 4]); return { q, order }; });
-  T = { ch: C.id, items, ans: items.map(() => null), cur: 0, mode, fromMistakes, done: false, end: timer ? Date.now() + items.length * 100000 : null, start: Date.now() };
+  T = { ch: C.id, items, ans: items.map(() => null), cur: 0, mode, fromMistakes, done: false, end: timer ? Date.now() + items.length * 100000 : null, start: Date.now(), recall, qTimed: !!recall && S.recallTimed !== false, qEnds: {} };
   render();
 }
 
@@ -647,15 +738,18 @@ function renderTest() {
   const C = getCh(T.ch), it = T.items[T.cur], q = it.q, a = T.ans[T.cur];
   const prac = T.mode === "practice", locked = prac && a !== null;
   $("#tabs").hidden = true;
-  $("#meta").textContent = T.fromMistakes ? "Mistakes practice" : prac ? "Practice" : "Exam";
+  $("#meta").textContent = T.recall ? "Recall · " + C.topics[T.recall] : T.fromMistakes ? "Mistakes practice" : prac ? "Practice" : "Exam";
+  const qTimer = T.qTimed && a === null;
+  if (qTimer && !T.qEnds[T.cur]) T.qEnds[T.cur] = Date.now() + QSEC * 1000;
   const answered = T.ans.filter((x) => x !== null).length;
   app.innerHTML = `
   <section class="glass stack" style="gap:10px">
-    <div class="row between"><span class="mono small">Q ${T.cur + 1} / ${T.items.length}</span>${T.end ? `<span class="timer" id="tm"></span>` : ""}<button class="btn" id="quit" style="padding:7px 12px;font-size:13px">End</button></div>
+    <div class="row between"><span class="mono small">Q ${T.cur + 1} / ${T.items.length}</span>${T.end || qTimer ? `<span class="timer" id="tm"></span>` : ""}<button class="btn" id="quit" style="padding:7px 12px;font-size:13px">End</button></div>
     <div class="progress"><i style="width:${pct(answered, T.items.length)}%"></i></div>
     <div class="qnav">${T.items.map((x, i) => { const v = T.ans[i]; let c = v !== null ? "ans" : ""; if (prac && v !== null) c = x.order[v] === x.q.a ? "ok" : "bad"; return `<button class="qn ${c} ${i === T.cur ? "cur" : ""}" data-j="${i}">${i + 1}</button>`; }).join("")}</div>
   </section>
   <section class="glass stack" style="gap:12px">
+    ${qTimer ? `<div class="qtimer"><i id="qbar" style="width:100%"></i></div>` : ""}
     <span class="badge" style="align-self:flex-start">${C.topics[q.t]}</span>
     <div class="qtext">${esc(q.q)}</div>
     <div class="stack" style="gap:9px">${it.order.map((oi, k) => {
@@ -663,12 +757,12 @@ function renderTest() {
       if (locked) { if (oi === q.a) cls = "right"; else if (a === k) cls = "wrong"; }
       return `<button class="opt ${cls}" data-k="${k}" ${locked ? "disabled" : ""}><span class="L">${LET[k]}</span><span>${esc(q.o[oi])}</span></button>`;
     }).join("")}</div>
-    ${locked ? `<div class="explain"><b style="color:${it.order[a] === q.a ? "var(--lime)" : "var(--red)"}">${it.order[a] === q.a ? "Correct · +1.5" : `Wrong · −0.4 · answer ${LET[it.order.indexOf(q.a)]}`}</b><span>${esc(q.e)}</span><span class="small" style="color:var(--violet)"><b>Key note:</b> ${esc(q.tip)}</span></div>` : ""}
+    ${locked ? `<div class="explain"><b style="color:${it.order[a] === q.a ? "var(--lime)" : "var(--red)"}">${a === "t" ? `Time's up · answer ${LET[it.order.indexOf(q.a)]}` : it.order[a] === q.a ? "Correct · +1.5" : `Wrong · −0.4 · answer ${LET[it.order.indexOf(q.a)]}`}</b><span>${esc(q.e)}</span><span class="small" style="color:var(--violet)"><b>Key note:</b> ${esc(q.tip)}</span></div>` : ""}
     ${!prac && a !== null ? `<button class="btn" id="clr" style="align-self:flex-start;font-size:13px;padding:7px 12px">Clear answer (leave blank)</button>` : ""}
     <div class="row between"><button class="btn" id="prev" ${T.cur ? "" : "disabled"}>‹ Prev</button>${T.cur < T.items.length - 1 ? `<button class="btn primary" id="next">Next ›</button>` : `<button class="btn primary" id="fin">Finish</button>`}</div>
   </section>
   <div id="confirmBox"></div>`;
-  app.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => { if (locked) return; T.ans[T.cur] = +b.dataset.k; renderTest(); }));
+  app.querySelectorAll("[data-k]").forEach((b) => (b.onclick = () => { if (locked) return; clearInterval(timerH); T.ans[T.cur] = +b.dataset.k; renderTest(); }));
   app.querySelectorAll("[data-j]").forEach((b) => (b.onclick = () => { T.cur = +b.dataset.j; renderTest(); }));
   $("#prev").onclick = () => { T.cur--; renderTest(); };
   if ($("#next")) $("#next").onclick = () => { T.cur++; renderTest(); };
@@ -682,7 +776,15 @@ function renderTest() {
   if ($("#fin")) $("#fin").onclick = () => (blankN ? ask(`${blankN} question(s) are blank and will score 0.`) : finishTest());
   $("#quit").onclick = () => ask(`End the test now? ${blankN} blank question(s) will score 0.`);
   clearInterval(timerH);
-  if (T.end) {
+  if (qTimer) {
+    const tick = () => {
+      const ms = Math.max(0, T.qEnds[T.cur] - Date.now()), s = Math.ceil(ms / 1000), tm = $("#tm"), bar = $("#qbar");
+      if (tm) { tm.textContent = `0:${String(s).padStart(2, "0")}`; tm.classList.toggle("low", s <= 10); }
+      if (bar) bar.style.width = (ms / (QSEC * 10)) + "%";
+      if (!ms) { clearInterval(timerH); T.ans[T.cur] = "t"; toast("Time's up"); renderTest(); }
+    };
+    tick(); timerH = setInterval(tick, 250);
+  } else if (T.end) {
     const tick = () => { const s = Math.max(0, Math.round((T.end - Date.now()) / 1000)); const tm = $("#tm"); if (tm) { tm.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; tm.classList.toggle("low", s < 60); } if (!s) { clearInterval(timerH); toast("Time is up"); finishTest(); } };
     tick(); timerH = setInterval(tick, 1000);
   }
@@ -691,7 +793,7 @@ document.addEventListener("keydown", (e) => {
   if (!T || T.done || e.target.closest("input,textarea")) return;
   const k = e.key.toUpperCase(), idx = "ABCDE".indexOf(k) >= 0 ? "ABCDE".indexOf(k) : "12345".indexOf(e.key);
   const locked = T.mode === "practice" && T.ans[T.cur] !== null;
-  if (idx >= 0 && !locked) { T.ans[T.cur] = idx; renderTest(); }
+  if (idx >= 0 && !locked) { clearInterval(timerH); T.ans[T.cur] = idx; renderTest(); }
   else if (e.key === "ArrowRight" && T.cur < T.items.length - 1) { T.cur++; renderTest(); }
   else if (e.key === "ArrowLeft" && T.cur > 0) { T.cur--; renderTest(); }
 });
@@ -709,18 +811,22 @@ function finishTest() {
   });
   const score = c * 1.5 - w * 0.4, max = T.items.length * 1.5;
   T.res = { c, w, b, score, max, per, secs: Math.round((Date.now() - T.start) / 1000) };
-  if (!T.fromMistakes) S.tests.push({ ch: T.ch, at: Date.now(), n: T.items.length, c, w, b, score, max, per });
+  if (T.recall) {
+    const C = getCh(T.ch), p = pct(c, T.items.length);
+    T.res.sched = schedule(C, T.recall, p);
+    S.recallLog = (S.recallLog || []).concat([{ ch: T.ch, deck: T.recall, at: Date.now(), pct: p }]).slice(-60);
+  } else if (!T.fromMistakes) S.tests.push({ ch: T.ch, at: Date.now(), n: T.items.length, c, w, b, score, max, per });
   save();
   T.done = true; ui.rfilter = "wrong";
   render();
 }
 
 function qCard(it, v, num) {
-  const q = it.q, mine = v === null ? null : it.order[v];
+  const q = it.q, mine = v === null ? null : v === "t" ? "t" : it.order[v];
   return `<div class="list-item">
     <div class="row between"><span class="badge">${num ? "Q" + num + " · " : ""}${getCh(T ? T.ch : ui.ch).topics[q.t]}</span>${mine === null ? '<span class="badge" style="color:var(--amber);border-color:rgba(255,209,102,.4);background:rgba(255,209,102,.1)">blank</span>' : mine === q.a ? '<span class="badge ok">correct</span>' : '<span class="badge pk">wrong</span>'}</div>
     <div class="qtext" style="font-size:15.5px">${esc(q.q)}</div>
-    ${mine !== null && mine !== q.a ? `<p class="small" style="color:var(--red)">Your answer: ${esc(q.o[mine])}</p>` : ""}
+    ${mine === "t" ? `<p class="small" style="color:var(--red)">Time ran out</p>` : mine !== null && mine !== q.a ? `<p class="small" style="color:var(--red)">Your answer: ${esc(q.o[mine])}</p>` : ""}
     <p class="small" style="color:var(--lime)">Correct: ${esc(q.o[q.a])}</p>
     <div class="explain"><span>${esc(q.e)}</span><span class="small" style="color:var(--violet)"><b>Key note:</b> ${esc(q.tip)}</span></div>
   </div>`;
@@ -729,20 +835,28 @@ function renderResults() {
   const C = getCh(T.ch), R = T.res, p = Math.max(0, pct(R.score, R.max)), r = 70, circ = 2 * Math.PI * r;
   $("#tabs").hidden = true; $("#meta").textContent = "Results";
   const list = T.items.map((it, i) => ({ it, v: T.ans[i], i })).filter((x) => ui.rfilter === "all" || x.v === null || x.it.order[x.v] !== x.it.q.a);
-  app.innerHTML = `
+  const SC = R.sched;
+  const recallCard = SC ? `<section class="glass stack next-card">
+    <span class="lbl">${C.topics[T.recall]} · recall ${SC.pct}%</span>
+    <p class="muted small">${SC.kept ? "Early practice: your schedule stays the same." : SC.after > SC.before ? "Step up. The gap gets longer." : SC.pct < 60 ? "Below 60%: this section starts again tomorrow." : "Same gap again to strengthen it."}</p>
+    <span class="small muted">Come back for your next recall</span>
+    <span class="when neon-text">${whenText(SC.next)}</span>
+    <div class="row" style="justify-content:center">${steps(SC.after)}<span class="small muted">${SC.after === 6 ? "Locked in" : "Step " + SC.after + "/6"}</span></div>
+  </section>` : "";
+  app.innerHTML = `${recallCard}
   <section class="glass stack" style="align-items:center;text-align:center;gap:12px">
-    <h2>${T.fromMistakes ? "Mistakes practice done" : "Test complete"}</h2>
+    <h2>${T.recall ? "Recall complete" : T.fromMistakes ? "Mistakes practice done" : "Test complete"}</h2>
     <div class="score-ring"><svg viewBox="0 0 170 170"><circle cx="85" cy="85" r="${r}" stroke="rgba(255,255,255,.08)"/><circle cx="85" cy="85" r="${r}" stroke="url(#sg)" stroke-linecap="round" stroke-dasharray="${circ}" stroke-dashoffset="${circ * (1 - p / 100)}" style="filter:drop-shadow(0 0 8px #35f2e0)"/><defs><linearGradient id="sg"><stop offset="0" stop-color="#35f2e0"/><stop offset="1" stop-color="#ff5fd2"/></linearGradient></defs></svg>
       <div class="val"><b>${R.score.toFixed(1)}</b><span class="small muted">of ${R.max.toFixed(1)}</span></div></div>
     <p class="muted small">${p >= 80 ? "Excellent. These pages are under control." : p >= 55 ? "Good. Review the key notes below to close the gaps." : "Go back to Review and Figures, then try again."} · ${Math.floor(R.secs / 60)}m ${R.secs % 60}s</p>
     <div class="kpis" style="width:100%"><div class="kpi g"><b>${R.c}</b><span>correct</span></div><div class="kpi r"><b>${R.w}</b><span>wrong</span></div><div class="kpi y"><b>${R.b}</b><span>blank</span></div><div class="kpi c"><b>${pct(R.c, T.items.length)}%</b><span>accuracy</span></div></div>
   </section>
   <section class="glass stack"><h3>By section</h3>${Object.entries(R.per).map(([k, [a, t]]) => `<div class="bar-row"><div class="row between small"><span>${C.topics[k]}</span><span class="mono muted">${a}/${t}</span></div><div class="progress"><i style="width:${pct(a, t)}%"></i></div></div>`).join("")}</section>
-  <div class="row"><button class="btn primary" id="again">New test</button><button class="btn" id="tomist">Go to Mistakes</button><button class="btn" id="out">Back to chapter</button></div>
+  <div class="row"><button class="btn primary" id="again">${T.recall ? "Back to Recall" : "New test"}</button><button class="btn" id="tomist">Go to Mistakes</button><button class="btn" id="out">Back to chapter</button></div>
   <section class="stack"><div class="row"><button class="chip ${ui.rfilter === "wrong" ? "on" : ""}" data-rf="wrong">Wrong &amp; blank</button><button class="chip ${ui.rfilter === "all" ? "on" : ""}" data-rf="all">All questions</button></div>
     ${list.length ? list.map((x) => qCard(x.it, x.v, x.i + 1)).join("") : `<div class="glass empty"><p>No mistakes in this test.</p></div>`}</section>`;
   app.querySelectorAll("[data-rf]").forEach((c) => (c.onclick = () => { ui.rfilter = c.dataset.rf; renderResults(); }));
-  $("#again").onclick = () => { T = null; ui.tab = "test"; render(); };
+  $("#again").onclick = () => { const back = T.recall ? "recall" : "test"; T = null; ui.tab = back; render(); };
   $("#tomist").onclick = () => { T = null; ui.tab = "mistakes"; render(); };
   $("#out").onclick = () => { T = null; ui.tab = "review"; render(); };
 }
@@ -846,6 +960,7 @@ function vProgress(C, el) {
     $("#ry", el).onclick = () => {
       C.sections.forEach((s) => delete S.reviewed[s.id]); C.flashcards.forEach((f, i) => delete S.known[C.id + ":" + i]);
       C.questions.forEach((q) => { delete S.qs[q.id]; delete S.mistakes[q.id]; }); S.tests = S.tests.filter((t) => t.ch !== C.id);
+      Object.keys(C.topics).forEach((k) => S.srs && delete S.srs[deckKey(C, k)]); S.recallLog = (S.recallLog || []).filter((x) => x.ch !== C.id);
       save(); toast("Progress reset"); render();
     };
     $("#rn", el).onclick = () => ($("#rc", el).innerHTML = "");
